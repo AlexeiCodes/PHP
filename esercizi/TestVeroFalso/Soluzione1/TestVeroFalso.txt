@@ -1,0 +1,15 @@
+Dato un file test.txt fatto come il seguente:
+
+Il cavallo di Garibaldi era bianco.vero
+Il delfino e' un pesce.falso
+In windsurf si e' raggiunto i 100 Km/h.vero
+I colori possibili con tre byte sono 65536.falso
+.....
+Creare uno o più programmi PHP che permettano di effettuare 
+il test sulle domande.
+Dare il punteggio in centesimi
+
+Facoltativo:
+0) La correzione delle risposte
+1) Impostare il numero di domande a priori (meno delle righe del file)
+2) Randomizzare la sequenza di domande

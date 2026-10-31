@@ -1,0 +1,8 @@
+<pre>
+<?php
+//echo $_REQUEST["codice"];
+file_put_contents("prova.c", $_REQUEST["codice"]);
+system("g++ prova.c -o prova 2> errori.txt");
+system("cat errori.txt");
+system("./prova");
+?>

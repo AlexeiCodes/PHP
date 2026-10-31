@@ -1,0 +1,101 @@
+La Terra gira intorno al Sole.Vero
+La Luna è una stella.Falso
+Il Sole è una stella.Vero
+Marte è chiamato il pianeta rosso.Vero
+Giove è il pianeta più piccolo del Sistema Solare.Falso
+La Terra ha due lune naturali.Falso
+Saturno è famoso per i suoi anelli.Vero
+Venere è il pianeta più vicino al Sole.Falso
+Mercurio è il pianeta più vicino al Sole.Vero
+Nettuno è un pianeta del Sistema Solare.Vero
+L'acqua congela a 0 gradi Celsius.Vero
+L'acqua bolle a 50 gradi Celsius al livello del mare.Falso
+L'ossigeno è necessario alla respirazione umana.Vero
+Il simbolo chimico dell'oro è Au.Vero
+Il simbolo chimico dell'acqua è H2O.Falso
+Un triangolo ha quattro lati.Falso
+Un quadrato ha quattro lati uguali.Vero
+Un chilometro equivale a 1000 metri.Vero
+Un'ora contiene 100 minuti.Falso
+Una settimana ha sette giorni.Vero
+Roma è la capitale d'Italia.Vero
+Milano è la capitale della Francia.Falso
+Parigi è la capitale della Francia.Vero
+Madrid è la capitale della Spagna.Vero
+Berlino è la capitale della Germania.Vero
+Lisbona è la capitale del Portogallo.Vero
+Atene è la capitale della Grecia.Vero
+Vienna è la capitale della Svizzera.Falso
+Il Nilo è un fiume.Vero
+L'Everest si trova nella catena dell'Himalaya.Vero
+L'Australia è anche un continente.Vero
+Il Sahara si trova in Sud America.Falso
+Il Giappone è uno Stato insulare.Vero
+Il Brasile si trova in Europa.Falso
+L'Equatore divide la Terra in emisfero nord e sud.Vero
+L'Antartide si trova vicino al Polo Nord.Falso
+L'italiano deriva dal latino.Vero
+Dante Alighieri ha scritto la Divina Commedia.Vero
+Alessandro Manzoni ha scritto I Promessi Sposi.Vero
+Giacomo Leopardi è stato un poeta italiano.Vero
+Pinocchio è stato creato da Carlo Collodi.Vero
+William Shakespeare era uno scrittore francese.Falso
+La Gioconda è un dipinto di Leonardo da Vinci.Vero
+Michelangelo ha dipinto la volta della Cappella Sistina.Vero
+L'Odissea è tradizionalmente attribuita a Omero.Vero
+La Divina Commedia è stata scritta in latino.Falso
+L'Impero romano aveva come capitale Roma.Vero
+La Rivoluzione francese iniziò nel 1789.Vero
+Cristoforo Colombo arrivò in America nel 1492.Vero
+La Seconda guerra mondiale terminò nel 1945.Vero
+La Prima guerra mondiale iniziò nel 1939.Falso
+Giulio Cesare fu un imperatore romano.Falso
+Napoleone Bonaparte nacque in Corsica.Vero
+La Torre Eiffel si trova a Londra.Falso
+Le piramidi di Giza si trovano in Egitto.Vero
+La scrittura è nata prima dell'invenzione dell'agricoltura.Falso
+Un mammifero allatta i propri piccoli.Vero
+I delfini sono pesci.Falso
+I pipistrelli sono mammiferi.Vero
+I pinguini sono uccelli.Vero
+Tutti i serpenti sono velenosi.Falso
+Le api producono miele.Vero
+I ragni hanno sei zampe.Falso
+Un polpo ha otto tentacoli.Vero
+Le balene respirano attraverso le branchie.Falso
+Le piante producono ossigeno durante la fotosintesi.Vero
+Le radici assorbono acqua dal terreno.Vero
+I funghi appartengono al regno delle piante.Falso
+Gli esseri umani hanno normalmente due polmoni.Vero
+Il cuore umano pompa il sangue.Vero
+Il cervello fa parte del sistema nervoso.Vero
+Le ossa adulte sono normalmente più di 1000.Falso
+Il sangue umano è blu all'interno del corpo.Falso
+La pelle è un organo del corpo umano.Vero
+I denti sono fatti esclusivamente di osso.Falso
+La vitamina C si trova anche negli agrumi.Vero
+Il ferro è un metallo.Vero
+Il legno conduce l'elettricità meglio del rame.Falso
+Il suono può viaggiare nel vuoto.Falso
+La luce viaggia più velocemente del suono nel vuoto.Vero
+Un magnete può attirare oggetti di ferro.Vero
+L'elettricità e il magnetismo sono fenomeni collegati.Vero
+Il ghiaccio è acqua allo stato solido.Vero
+L'anidride carbonica ha formula CO2.Vero
+Il numero zero è un numero pari.Vero
+Il numero 17 è divisibile per 2 senza resto.Falso
+Un angolo retto misura 90 gradi.Vero
+La somma degli angoli interni di un triangolo piano è 180 gradi.Vero
+Il numero romano X rappresenta 10.Vero
+Il numero romano L rappresenta 100.Falso
+Un anno bisestile ha 366 giorni.Vero
+Un giorno dura esattamente 12 ore.Falso
+Il pianeta Terra ruota su se stesso.Vero
+Il vulcano Etna si trova in Sicilia.Vero
+Venezia si trova in Toscana.Falso
+La Sardegna è un'isola italiana.Vero
+Il Po è uno dei fiumi più lunghi d'Italia.Vero
+Il Mar Mediterraneo bagna le coste italiane.Vero
+La bandiera italiana contiene verde, bianco e rosso.Vero
+L'Italia confina con la Germania.Falso
+La valuta ufficiale italiana è l'euro.Vero

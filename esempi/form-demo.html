@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Tutti i campi di un form</title></head>
+<body>
+<h2>Prova tutti i tipi di input</h2>
+<!-- cambia method in "get" per vedere i dati nell'URL -->
+<form action="form-demo.php" method="post">
+  Nome: <input type="text" name="nome" placeholder="Mario" required><br>
+  Password: <input type="password" name="pwd" maxlength="8"><br>
+  Età: <input type="number" name="eta" min="1" max="99"><br>
+  Email: <input type="email" name="email"><br>
+  Sesso: <input type="radio" name="sesso" value="M"> M
+         <input type="radio" name="sesso" value="F"> F<br>
+  Hobby: <input type="checkbox" name="hobby[]" value="calcio"> calcio
+         <input type="checkbox" name="hobby[]" value="musica"> musica
+         <input type="checkbox" name="hobby[]" value="videogiochi"> videogiochi<br>
+  Classe: <select name="classe"><option>5A</option><option selected>5B</option><option>5C</option></select><br>
+  Note:<br><textarea name="note" rows="3" cols="40"></textarea><br>
+  <input type="hidden" name="azione" value="iscrizione">
+  <input type="checkbox" name="privacy" value="si"> Accetto la privacy<br><br>
+  <input type="submit" value="Invia"> <input type="reset" value="Cancella">
+</form>
+</body></html>
