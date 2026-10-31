@@ -1,0 +1,83 @@
+<?php
+// =========================================================
+//  SCONTRINO - soluzione con PHP base
+//  Novita': DUE file. Il primo diventa un "dizionario" prodotto => prezzo
+// =========================================================
+
+// ---------- PRIMO FILE: LISTINO ----------
+$righeL = file("../listino.txt");
+for ($i = 0; $i < count($righeL); $i++)
+{
+    $parti = explode(",", $righeL[$i]);
+    $p = $parti[0];
+    $prezzo[$p] = $parti[1];
+    settype($prezzo[$p], "double");      // "2.40\n" -> 2.4
+    $prodotti[] = $p;                     // elenco per scorrere con il for
+    $ordinato[$p] = 0;                    // per il punto 5: per ora non ordinato
+}
+
+// ---------- SECONDO FILE: ORDINE ----------
+$righeO = file("../ordine.txt");
+$totale = 0;
+$spesaMax = -1;
+echo "<h2>1) e 2) Scontrino</h2><table border=1>";
+echo "<tr><th>Prodotto</th><th>Q.ta</th><th>Prezzo</th><th>Totale</th></tr>";
+for ($i = 0; $i < count($righeO); $i++)
+{
+    $parti = explode(",", $righeO[$i]);
+    $p = $parti[0];
+    $q = $parti[1];
+    settype($q, "integer");
+
+    if (isset($prezzo[$p]))                       // il prodotto e' nel listino?
+    {
+        $riga = $q * $prezzo[$p];
+        $totale = $totale + $riga;
+        $ordinato[$p] = 1;
+        $spesa[$p] = $riga;                       // per il punto 4
+        $acquistati[] = $p;
+        if ($riga > $spesaMax) $spesaMax = $riga;
+        printf("<tr><td>%s</td><td>%d</td><td>%.2f</td><td>%.2f</td></tr>", $p, $q, $prezzo[$p], $riga);
+    }
+    else
+        echo "<tr><td colspan=4><font color=red>$p: non disponibile</font></td></tr>";
+}
+echo "</table>";
+
+// ---------- 3) TOTALE E SCONTO ----------
+echo "<h2>3) Totale</h2>";
+printf("Totale: %.2f euro<br>", $totale);
+if ($totale > 30)
+{
+    $sconto = $totale * 10 / 100;
+    printf("Sconto 10%%: -%.2f euro<br>", $sconto);
+    printf("<b>Da pagare: %.2f euro</b>", $totale - $sconto);
+}
+else
+    printf("<b>Da pagare: %.2f euro</b> (nessuno sconto)", $totale);
+
+// ---------- 4) PRODOTTO CON LA SPESA MAGGIORE ----------
+echo "<h2>4) Spesa maggiore</h2>";
+for ($i = 0; $i < count($acquistati); $i++)
+    if ($spesa[$acquistati[$i]] == $spesaMax)
+        printf("%s (%.2f euro)<br>", $acquistati[$i], $spesaMax);
+
+// ---------- 5) PRODOTTI NON ORDINATI ----------
+echo "<h2>5) Prodotti del listino non ordinati</h2>";
+for ($i = 0; $i < count($prodotti); $i++)
+    if ($ordinato[$prodotti[$i]] == 0) echo $prodotti[$i] . "<br>";
+
+// ---------- 6) FORM: PREVENTIVO ----------
+echo "<h2>6) Quanto spenderei?</h2><form action='' method='get'><select name='prodotto'>";
+for ($i = 0; $i < count($prodotti); $i++)
+    echo "<option value='$prodotti[$i]'>$prodotti[$i]</option>";
+echo "</select> Quantita: <input type='number' name='q' min='1' value='1'> <input type='submit' value='Calcola'></form>";
+if (isset($_GET["prodotto"]) && isset($_GET["q"]))
+{
+    $p = $_GET["prodotto"];
+    $q = $_GET["q"];
+    settype($q, "integer");
+    if (isset($prezzo[$p]))
+        printf("%d x %s = %.2f euro", $q, $p, $q * $prezzo[$p]);
+}
+?>

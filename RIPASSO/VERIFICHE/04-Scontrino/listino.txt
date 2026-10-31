@@ -1,0 +1,10 @@
+Pane,2.40
+Latte,1.30
+Uova,2.90
+Pasta,1.10
+Pomodori,3.50
+Formaggio,6.80
+Caffe,4.20
+Mele,2.20
+Acqua,0.40
+Biscotti,3.10

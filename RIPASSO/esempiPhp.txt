@@ -1,0 +1,327 @@
+<form action="risultati.php" method="GET">
+  <label for="search">Cerca nel sito:</label>
+  <input type="text" id="search" name="q" placeholder="Scrivi qualcosa...">
+  <button type="submit">Cerca</button>
+</form>
+
+<?php
+$righe = file('nome_file.txt');
+
+for ($i = 0; $i < count($righe); $i++) {
+    echo htmlspecialchars($righe[$i]) . "<br>";
+}
+?>
+
+<?php
+// ==========================================
+// 1. IF / ELSEIF / ELSE
+// ==========================================
+$voto = 24;
+
+if ($voto >= 27) {
+    echo "Ottimo!<br>";
+} elseif ($voto >= 18) {
+    echo "Esame superato.<br>";
+} else {
+    echo "Bocciato.<br>";
+}
+
+echo "<hr>";
+
+// ==========================================
+// 2. SWITCH / CASE
+// ==========================================
+$colore = "rosso";
+
+switch ($colore) {
+    case "rosso":
+        echo "Il colore è rosso.<br>";
+        break;
+    case "blu":
+        echo "Il colore è blu.<br>";
+        break;
+    default:
+        echo "Colore non riconosciuto.<br>";
+}
+
+echo "<hr>";
+
+// ==========================================
+// 3. FOR (Ciclo numerico)
+// ==========================================
+for ($i = 1; $i <= 3; $i++) {
+    echo "Numero del giro (for): $i <br>";
+}
+
+echo "<hr>";
+
+// ==========================================
+// 4. WHILE (Ciclo condizionale)
+// ==========================================
+$contatore = 1;
+
+while ($contatore <= 3) {
+    echo "Contatore a (while): $contatore <br>";
+    $contatore++;
+}
+
+echo "<hr>";
+
+// ==========================================
+// 5. FOREACH (Ciclo per array)
+// ==========================================
+$colori = ["rosso", "verde", "blu"];
+
+foreach ($colori as $colore_item) {
+    echo "Colore dall'array (foreach): $colore_item <br>";
+}
+?>
+
+<?php
+// 1. Creiamo un array di numeri disordinati che vogliamo ordinare
+$numeri = [5, 2, 9, 1, 5, 6];
+
+// Stampiamo a schermo l'array originale unendo gli elementi con una virgola
+echo "Array originale: " . implode(", ", $numeri) . "<br>";
+
+// 2. Contiamo quanti elementi sono presenti all'interno dell'array
+$n = count($numeri);
+
+// 3. Algoritmo Bubble Sort (Ordinamento a bolle)
+// Il primo ciclo (esterni) ripete i passaggi necessari per completare l'ordinamento
+for ($i = 0; $i < $n - 1; $i++) {
+    
+    // Il secondo ciclo (interno) serve a confrontare gli elementi vicini a due a due
+    for ($j = 0; $j < $n - $i - 1; $j++) {
+        
+        // Se il numero attuale è più grande del numero successivo...
+        if ($numeri[$j] > $numeri[$j + 1]) {
+            
+            // ...invertiamo le loro posizioni usando una variabile temporanea ($temp)
+            $temp = $numeri[$j];                  // Salviamo temporaneamente il valore corrente
+            $numeri[$j] = $numeri[$j + 1];        // Spostiamo il valore più piccolo a sinistra
+            $numeri[$j + 1] = $temp;              // Mettiamo il valore più grande a destra
+        }
+    }
+}
+
+// 4. Mostriamo il risultato finale con i numeri ormai ordinati in ordine crescente
+echo "Array ordinato: " . implode(", ", $numeri);
+?>
+
+<?php
+$righe = file('nome_file.txt');
+
+foreach ($righe as $riga) {
+    echo htmlspecialchars($riga) . "<br>";
+}
+?>
+
+<?php
+// 1. Creiamo un array associativo (chiave => valore)
+$studente = [
+    "nome" => "Marco",
+    "cognome" => "Bianchi",
+    "eta" => 22,
+    "corso" => "Informatica"
+];
+
+// ==========================================
+// METODO 1: Usando il ciclo FOREACH
+// ==========================================
+echo "<h3>--- Stampato con FOREACH ---</h3>";
+
+// Il foreach è perfetto per gli array associativi perché ci dà direttamente chiave e valore
+foreach ($studente as $chiave => $valore) {
+    echo "<b>" . $chiave . "</b>: " . $valore . "<br>";
+}
+
+echo "<hr>";
+
+// ==========================================
+// METODO 2: Usando il ciclo FOR
+// ==========================================
+echo "<h3>--- Stampato con FOR ---</h3>";
+
+// Poiché il ciclo for richiede indici numerici, estraiamo chiavi e valori in due array separati
+$chiavi = array_keys($studente);
+$valori = array_values($studente);
+$n = count($studente);
+
+// Cicliamo con il for usando l'indice numerico $i
+for ($i = 0; $i < $n; $i++) {
+    echo "<b>" . $chiavi[$i] . "</b>: " . $valori[$i] . "<br>";
+}
+?>
+
+<?php
+// -------------------------------------------------------------------------
+// FUNZIONE PER AZZERARE/INIZIALIZZARE LE STATISTICHE
+// Restituisce un pacchetto di dati predefinito a 0 per ogni squadra
+// -------------------------------------------------------------------------
+function inizializza_statistiche_squadra() {
+    return [
+        'punti' => 0,
+        'gol_fatti' => 0,
+        'gol_subiti' => 0,
+        'vittorie_in_casa' => 0,
+        'vittorie_in_trasferta' => 0
+    ];
+}
+
+// Elenco fisso delle squadre partecipanti al torneo
+$elenco_nomi_squadre = ["Atalanta", "Bologna", "Fiorentina", "Inter", "Juventus", "Lazio", "Milan", "Napoli", "Roma", "Torino"];
+
+// Creiamo un unico array multidimensionale (array associativo principale)
+$classifica_generale = [];
+
+// Usiamo il ciclo foreach per popolare l'array unico sfruttando la funzione
+foreach ($elenco_nomi_squadre as $nome_squadra) {
+    $classifica_generale[$nome_squadra] = inizializza_statistiche_squadra();
+}
+
+// Leggiamo tutte le righe del file di testo
+$righe_del_file = file('squadre.txt');
+
+// -------------------------------------------------------------------------
+// CICLO PRINCIPALE: Analizziamo ogni partita e aggiorniamo l'array unico
+// -------------------------------------------------------------------------
+foreach ($righe_del_file as $riga_corrente) {
+    $dati_partita = explode(',', trim($riga_corrente));
+    
+    $squadra_casa = $dati_partita[0];
+    $squadra_ospite = $dati_partita[1];
+    $gol_casa = (int)$dati_partita[2];
+    $gol_ospite = (int)$dati_partita[3];
+
+    // Aggiorniamo gol fatti e subiti accedendo direttamente all'array unico
+    $classifica_generale[$squadra_casa]['gol_fatti'] += $gol_casa;
+    $classifica_generale[$squadra_casa]['gol_subiti'] += $gol_ospite;
+    
+    $classifica_generale[$squadra_ospite]['gol_fatti'] += $gol_ospite;
+    $classifica_generale[$squadra_ospite]['gol_subiti'] += $gol_casa;
+
+    // Assegnamo punti e vittorie in base al risultato della partita
+    if ($gol_casa > $gol_ospite) {
+        $classifica_generale[$squadra_casa]['punti'] += 3;
+        $classifica_generale[$squadra_casa]['vittorie_in_casa']++;
+    } elseif ($gol_casa < $gol_ospite) {
+        $classifica_generale[$squadra_ospite]['punti'] += 3;
+        $classifica_generale[$squadra_ospite]['vittorie_in_trasferta']++;
+    } else {
+        $classifica_generale[$squadra_casa]['punti']++;
+        $classifica_generale[$squadra_ospite]['punti']++;
+    }
+}
+
+
+// =========================================================================
+// 1) STAMPA DELLA CLASSIFICA
+// =========================================================================
+echo "<b>1) Classifica delle squadre:</b><br>";
+foreach ($classifica_generale as $nome_squadra => $statistiche) {
+    echo "$nome_squadra - Punti: {$statistiche['punti']}<br>";
+}
+
+
+// =========================================================================
+// 2) SQUADRE CON PIÙ VITTORIE (IN CASA E FUORI)
+// =========================================================================
+$massimo_vittorie_casa = 0;
+$massimo_vittorie_trasferta = 0;
+
+// Troviamo i valori massimi scorrendo l'array unico
+foreach ($classifica_generale as $statistiche) {
+    if ($statistiche['vittorie_in_casa'] > $massimo_vittorie_casa) {
+        $massimo_vittorie_casa = $statistiche['vittorie_in_casa'];
+    }
+    if ($statistiche['vittorie_in_trasferta'] > $massimo_vittorie_trasferta) {
+        $massimo_vittorie_trasferta = $statistiche['vittorie_in_trasferta'];
+    }
+}
+
+echo "<br><b>2) Squadre con più vittorie:</b><br>";
+echo "In casa (max $massimo_vittorie_casa vittorie): ";
+foreach ($classifica_generale as $nome_squadra => $statistiche) {
+    if ($statistiche['vittorie_in_casa'] == $massimo_vittorie_casa) {
+        echo "$nome_squadra ";
+    }
+}
+
+echo "<br>In trasferta (max $massimo_vittorie_trasferta vittorie): ";
+foreach ($classifica_generale as $nome_squadra => $statistiche) {
+    if ($statistiche['vittorie_in_trasferta'] == $massimo_vittorie_trasferta) {
+        echo "$nome_squadra ";
+    }
+}
+
+
+// =========================================================================
+// 3) PARTITE GIOCATE DA UNA SPECIFICA SQUADRA (Es. "Inter")
+// =========================================================================
+$squadra_da_cercare = "Inter";
+echo "<br><br><b>3) Partite giocate da $squadra_da_cercare:</b><br>";
+foreach ($righe_del_file as $riga_corrente) {
+    $dati_partita = explode(',', trim($riga_corrente));
+    if ($dati_partita[0] == $squadra_da_cercare || $dati_partita[1] == $squadra_da_cercare) {
+        echo "$riga_corrente<br>";
+    }
+}
+
+
+// =========================================================================
+// 4) SQUADRE CON PIÙ GOL FATTI E SUBITI
+// =========================================================================
+$massimo_gol_fatti = 0;
+$massimo_gol_subiti = 0;
+
+foreach ($classifica_generale as $statistiche) {
+    if ($statistiche['gol_fatti'] > $massimo_gol_fatti) {
+        $massimo_gol_fatti = $statistiche['gol_fatti'];
+    }
+    if ($statistiche['gol_subiti'] > $massimo_gol_subiti) {
+        $massimo_gol_subiti = $statistiche['gol_subiti'];
+    }
+}
+
+echo "<br><b>4) Statistiche gol:</b><br>";
+echo "Più gol fatti (max $massimo_gol_fatti): ";
+foreach ($classifica_generale as $nome_squadra => $statistiche) {
+    if ($statistiche['gol_fatti'] == $massimo_gol_fatti) {
+        echo "$nome_squadra ";
+    }
+}
+
+echo "<br>Più gol subiti (max $massimo_gol_subiti): ";
+foreach ($classifica_generale as $nome_squadra => $statistiche) {
+    if ($statistiche['gol_subiti'] == $massimo_gol_subiti) {
+        echo "$nome_squadra ";
+    }
+}
+
+
+// =========================================================================
+// 5) ORDINAMENTO ALFABETICO CON BUBBLE SORT E SCRITTURA SU FILE HTML
+// =========================================================================
+$squadre_ordinate = $elenco_nomi_squadre;
+$numero_squadre = count($squadre_ordinate);
+
+for ($indice_esterno = 0; $indice_esterno < $numero_squadre - 1; $indice_esterno++) {
+    for ($indice_interno = 0; $indice_interno < $numero_squadre - $indice_esterno - 1; $indice_interno++) {
+        if ($squadre_ordinate[$indice_interno] > $squadre_ordinate[$indice_interno + 1]) {
+            $supporto_temporaneo = $squadre_ordinate[$indice_interno];
+            $squadre_ordinate[$indice_interno] = $squadre_ordinate[$indice_interno + 1];
+            $squadre_ordinate[$indice_interno + 1] = $supporto_temporaneo;
+        }
+    }
+}
+
+$contenuto_html = "<ul>\n";
+foreach ($squadre_ordinate as $nome_squadra) {
+    $contenuto_html .= "<li>$nome_squadra</li>\n";
+}
+$contenuto_html .= "</ul>";
+
+file_put_contents('squadre.html', $contenuto_html);
+echo "<br><br><b>5) File 'squadre.html' generato e salvato correttamente!</b>";
+?>

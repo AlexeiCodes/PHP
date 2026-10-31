@@ -1,0 +1,10 @@
+Il codice PHP viene eseguito dal browser;F
+Le variabili PHP iniziano con il simbolo $;V
+In PHP le stringhe si uniscono con il punto;V
+Con method=post i dati si vedono nell'URL;F
+La funzione file legge un file riga per riga;V
+Una checkbox non spuntata invia il valore 0;F
+explode trasforma una stringa in un array;V
+settype puo' trasformare una stringa in un numero;V
+Un campo hidden non si vede nemmeno nel sorgente della pagina;F
+Con il for posso scorrere un array numerato usando count;V

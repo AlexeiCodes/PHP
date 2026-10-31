@@ -1,0 +1,29 @@
+ESERCIZIO IN PHP / simulazione verifica - MODULO DI REGISTRAZIONE
+_________________________________________________________________
+LOGICA PRINCIPALE: CONTROLLARE UNA STRINGA CARATTERE PER CARATTERE
+(non ci sono file di dati)
+
+1) Creare una pagina HTML (registrazione.html) con un form che chiede:
+   nome, cognome, eta' (numero), email, password, conferma password,
+   e un pulsante radio per il ruolo (studente / docente)
+
+2) Il programma PHP controlla i dati e scrive TUTTI gli errori trovati:
+   - nome e cognome: almeno 2 caratteri e solo lettere (niente cifre)
+   - eta': tra 14 e 99
+   - email: deve contenere UNA sola chiocciola @, non all'inizio e non alla
+     fine, e almeno un punto dopo la chiocciola
+   - password: almeno 8 caratteri, almeno una lettera maiuscola, almeno una
+     minuscola e almeno una cifra
+   - le due password devono essere uguali
+   - il ruolo deve essere scelto
+
+3) Se non ci sono errori scrivere "Registrazione completata" e generare lo
+   USERNAME cosi': prime 3 lettere del cognome in maiuscolo + prima lettera
+   del nome in maiuscolo + eta'   (Rossi Mario, 17  ->  ROSM17)
+   Se il cognome ha meno di 3 lettere usare tutto il cognome.
+
+4) Indicare la "forza" della password:
+   FORTE  = 12 o piu' caratteri e almeno un carattere che non e' ne' lettera
+            ne' cifra (es. ! ? # _)
+   MEDIA  = almeno 9 caratteri (ma non FORTE)
+   DEBOLE = tutte le altre

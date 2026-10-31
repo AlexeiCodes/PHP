@@ -1,0 +1,25 @@
+ESERCIZIO IN PHP / simulazione verifica - CONTO CORRENTE
+________________________________________________________
+LOGICA PRINCIPALE: RICORDARE I DATI TRA UN INVIO E L'ALTRO (campi hidden)
+(non ci sono file di dati; tutto in un'unica pagina che richiama se stessa)
+
+Realizzare la simulazione di un bancomat.
+
+1) La prima volta il conto parte con un saldo di 100 euro.
+2) La pagina mostra il saldo e un form con:
+   - due pulsanti radio: DEPOSITO / PRELIEVO
+   - un campo numerico per l'importo
+3) Ad ogni invio aggiornare il saldo con queste regole:
+   - l'importo deve essere maggiore di 0
+   - non si puo' prelevare piu' di 250 euro alla volta
+   - non si puo' prelevare piu' del saldo disponibile
+   se l'operazione non e' valida mostrare il motivo e NON cambiare il saldo
+4) Mostrare il numero di operazioni riuscite e lo STORICO di tutte le
+   operazioni riuscite (es. "+50  -20  +100")
+5) Dopo 5 operazioni riuscite il bancomat si blocca: scrivere
+   "Limite di operazioni raggiunto" e non mostrare piu' il form,
+   ma un link per ricominciare da capo
+6) Mostrare il saldo piu' alto raggiunto durante la sessione
+
+Suggerimento: saldo, numero di operazioni, storico e saldo massimo vanno
+"portati dietro" con dei campi hidden.

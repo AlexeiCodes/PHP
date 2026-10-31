@@ -1,0 +1,30 @@
+ESERCIZIO IN PHP / simulazione verifica - TEST CON PENALITA'
+____________________________________________________________
+LOGICA PRINCIPALE: CORREGGERE CON UN SISTEMA DI PUNTEGGIO DIVERSO
+
+Dato un file domande.txt (separatore ;) fatto cosi':
+
+Il codice PHP viene eseguito dal browser;F
+Le variabili PHP iniziano con il simbolo $;V
+...
+
+(V = vero, F = falso)
+
+Realizzare UN SOLO programma PHP (la pagina richiama se stessa) che:
+
+1) La prima volta mostra il nome dello studente da inserire (campo testo)
+   e tutte le domande, ognuna con TRE pulsanti radio: VERO, FALSO,
+   NON RISPONDO (gia' selezionato)
+2) Dopo l'invio corregge con questo punteggio:
+      risposta giusta     +1
+      risposta sbagliata  -0.5
+      non risponde         0
+3) Per ogni domanda scrive GIUSTA (verde), SBAGLIATA (rosso) o
+   NON DATA (grigio)
+4) Mostra quante giuste, sbagliate e non date, e il punteggio totale
+5) Calcola il voto in decimi:  voto = punteggio / numero domande * 10
+   Il voto non puo' essere sotto 1 (se esce meno di 1 si mette 1)
+   Scrivere "Mario: voto 7.5"
+6) Scrive un consiglio: se le sbagliate sono piu' delle non date
+   "Rispondi solo se sei sicuro!", altrimenti "Prova a rispondere di piu'!"
+   (se non ci sono ne' sbagliate ne' non date: "Perfetto!")

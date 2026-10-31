@@ -1,0 +1,102 @@
+<?php
+// =========================================================
+//  ANALIZZATORE DI NUMERI - soluzione con PHP base
+//  Novita': niente file, solo cicli e operatori
+// =========================================================
+
+// ---------- PARTE 2: ANALISI DI N ----------
+if (isset($_GET["n"]))
+{
+    $n = $_GET["n"];
+    settype($n, "integer");
+    if ($n <= 0)
+    {
+        echo "Errore: inserisci un numero maggiore di 0";
+        return;
+    }
+    echo "<h2>Analisi di $n</h2>";
+
+    // a) pari o dispari
+    if ($n % 2 == 0) echo "a) $n e' PARI<br>";
+    else echo "a) $n e' DISPARI<br>";
+
+    // b) divisori: provo tutti i numeri da 1 a n
+    $quanti = 0;
+    $sommaDiv = 0;                         // per il punto d (escluso n)
+    echo "b) Divisori: ";
+    for ($d = 1; $d <= $n; $d++)
+    {
+        if ($n % $d == 0)                  // resto 0 = d divide n
+        {
+            echo "$d ";
+            $quanti++;
+            if ($d != $n) $sommaDiv = $sommaDiv + $d;
+        }
+    }
+    echo "($quanti divisori)<br>";
+
+    // c) primo
+    if ($quanti == 2) echo "c) E' PRIMO<br>";
+    else echo "c) NON e' primo<br>";
+
+    // d) perfetto
+    if ($sommaDiv == $n) echo "d) E' PERFETTO<br>";
+    else echo "d) NON e' perfetto (somma divisori: $sommaDiv)<br>";
+
+    // e) e f) cifre: prendo l'ultima cifra con % 10 e la tolgo
+    $copia = $n;                           // lavoro su una copia, n mi serve ancora
+    $sommaCifre = 0;
+    $contrario = 0;
+    while ($copia > 0)
+    {
+        $cifra = $copia % 10;              // ultima cifra
+        $sommaCifre = $sommaCifre + $cifra;
+        $contrario = $contrario * 10 + $cifra;   // la aggiungo in fondo al contrario
+        $copia = ($copia - $cifra) / 10;   // tolgo l'ultima cifra
+    }
+    echo "e) Somma delle cifre: $sommaCifre<br>";
+    echo "f) Al contrario: $contrario";
+    if ($contrario == $n) echo " - e' PALINDROMO<br>";
+    else echo " - non e' palindromo<br>";
+
+    // g) binario: resti della divisione per 2, letti al contrario
+    $copia = $n;
+    $binario = "";
+    while ($copia > 0)
+    {
+        $bit = $copia % 2;
+        $binario = $bit . $binario;        // aggiungo il bit DAVANTI
+        $copia = ($copia - $bit) / 2;
+    }
+    echo "g) In binario: $binario<br>";
+}
+
+// ---------- PARTE 3: PRIMI TRA A E B ----------
+if (isset($_GET["a"]) && isset($_GET["b"]))
+{
+    $a = $_GET["a"];
+    $b = $_GET["b"];
+    settype($a, "integer");
+    settype($b, "integer");
+    if ($a > $b) { $tmp = $a; $a = $b; $b = $tmp; }
+
+    echo "<h2>Numeri primi tra $a e $b</h2><table border=1 cellpadding=4><tr>";
+    $trovati = 0;
+    for ($x = $a; $x <= $b; $x++)
+    {
+        // conto i divisori di x
+        $div = 0;
+        for ($d = 1; $d <= $x; $d++)
+            if ($x % $d == 0) $div++;
+
+        if ($div == 2)
+        {
+            echo "<td>$x</td>";
+            $trovati++;
+            if ($trovati % 5 == 0) echo "</tr><tr>";   // ogni 5 numeri vado a capo
+        }
+    }
+    echo "</tr></table>";
+    echo "Trovati: $trovati";
+}
+?>

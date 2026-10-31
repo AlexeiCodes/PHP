@@ -1,0 +1,144 @@
+<?php
+// =========================================================
+//  TORNEO DI CALCETTO - soluzione con PHP base
+//  (solo for, if, array, file, explode, settype, count, isset)
+// =========================================================
+
+$righe = file("../partite.txt");
+
+// ---------- LETTURA ----------
+for ($i = 0; $i < count($righe); $i++)
+{
+    $parti = explode(",", $righe[$i]);
+    $casa   = $parti[0];
+    $ospite = $parti[1];
+    $gc     = $parti[2];
+    $go     = $parti[3];
+    settype($gc, "integer");
+    settype($go, "integer");
+
+    $partite[] = array($casa, $ospite, $gc, $go);   // per i punti 4 e 5
+
+    // la prima volta che incontro una squadra preparo tutte le sue caselle
+    // e la aggiungo all'elenco $nomi (serve per scorrere con il for)
+    $dueSquadre = array($casa, $ospite);
+    for ($k = 0; $k < 2; $k++)
+    {
+        $s = $dueSquadre[$k];
+        if (!isset($punti[$s]))
+        {
+            $punti[$s] = 0;  $giocate[$s] = 0;  $vinte[$s] = 0;
+            $pari[$s] = 0;   $perse[$s] = 0;    $diff[$s] = 0;
+            $nomi[] = $s;
+        }
+        $giocate[$s] = $giocate[$s] + 1;
+    }
+
+    // differenza reti: chi gioca in casa fa gc e subisce go, l'ospite il contrario
+    $diff[$casa]   = $diff[$casa] + $gc - $go;
+    $diff[$ospite] = $diff[$ospite] + $go - $gc;
+
+    if ($gc > $go)
+    {
+        $punti[$casa] = $punti[$casa] + 3;
+        $vinte[$casa]++;
+        $perse[$ospite]++;
+    }
+    elseif ($gc < $go)
+    {
+        $punti[$ospite] = $punti[$ospite] + 3;
+        $vinte[$ospite]++;
+        $perse[$casa]++;
+    }
+    else
+    {
+        $punti[$casa]++;    $punti[$ospite]++;
+        $pari[$casa]++;     $pari[$ospite]++;
+    }
+}
+
+// ---------- 1) TABELLA DELLE SQUADRE ----------
+echo "<h2>1) Riepilogo</h2><table border=1>";
+echo "<tr><th>Squadra</th><th>G</th><th>V</th><th>P</th><th>S</th><th>Punti</th></tr>";
+for ($i = 0; $i < count($nomi); $i++)
+{
+    $s = $nomi[$i];
+    echo "<tr><td>$s</td><td>$giocate[$s]</td><td>$vinte[$s]</td><td>$pari[$s]</td><td>$perse[$s]</td><td>$punti[$s]</td></tr>";
+}
+echo "</table>";
+
+// ---------- 2) CLASSIFICA: BUBBLE SORT CON SPAREGGIO ----------
+// copio l'elenco dei nomi per non rovinare l'ordine originale
+for ($i = 0; $i < count($nomi); $i++) $classifica[$i] = $nomi[$i];
+
+for ($i = 0; $i < count($classifica) - 1; $i++)
+{
+    for ($j = 0; $j < count($classifica) - 1 - $i; $j++)
+    {
+        $a = $classifica[$j];
+        $b = $classifica[$j + 1];
+        // $a deve andare DOPO $b se ha meno punti,
+        // oppure se ha gli stessi punti ma una differenza reti peggiore
+        if ($punti[$a] < $punti[$b] || ($punti[$a] == $punti[$b] && $diff[$a] < $diff[$b]))
+        {
+            $classifica[$j] = $b;          // scambio i due nomi
+            $classifica[$j + 1] = $a;
+        }
+    }
+}
+echo "<h2>2) Classifica</h2><table border=1><tr><th>Pos</th><th>Squadra</th><th>Punti</th><th>Diff. reti</th></tr>";
+for ($i = 0; $i < count($classifica); $i++)
+{
+    $s = $classifica[$i];
+    printf("<tr><td>%d</td><td>%s</td><td>%d</td><td>%+d</td></tr>", $i + 1, $s, $punti[$s], $diff[$s]);
+    // %+d stampa anche il segno + davanti ai positivi
+}
+echo "</table>";
+
+// ---------- 3) IMBATTUTE ----------
+echo "<h2>3) Squadre imbattute</h2>";
+$nessuna = 1;
+for ($i = 0; $i < count($nomi); $i++)
+    if ($perse[$nomi[$i]] == 0)
+    {
+        echo $nomi[$i] . "<br>";
+        $nessuna = 0;
+    }
+if ($nessuna == 1) echo "Nessuna";
+
+// ---------- 4) PARTITA CON PIU' GOL ----------
+$max = -1;
+for ($i = 0; $i < count($partite); $i++)
+    if ($partite[$i][2] + $partite[$i][3] > $max) $max = $partite[$i][2] + $partite[$i][3];
+echo "<h2>4) Partite con piu' gol ($max)</h2>";
+for ($i = 0; $i < count($partite); $i++)
+    if ($partite[$i][2] + $partite[$i][3] == $max)
+        echo $partite[$i][0] . " - " . $partite[$i][1] . " " . $partite[$i][2] . "-" . $partite[$i][3] . "<br>";
+
+// ---------- 5) FORM: PARTITE DI UNA SQUADRA ----------
+echo "<h2>5) Partite di una squadra</h2><form action='' method='get'><select name='squadra'>";
+for ($i = 0; $i < count($nomi); $i++)
+    echo "<option value='$nomi[$i]'>$nomi[$i]</option>";
+echo "</select> <input type='submit' value='Mostra'></form>";
+
+if (isset($_GET["squadra"]))
+{
+    $sq = $_GET["squadra"];
+    for ($i = 0; $i < count($partite); $i++)
+    {
+        $c = $partite[$i][0];  $o = $partite[$i][1];
+        $gc = $partite[$i][2]; $go = $partite[$i][3];
+        if ($c == $sq || $o == $sq)
+        {
+            // gol "miei" e gol "loro" dal punto di vista della squadra scelta
+            if ($c == $sq) { $miei = $gc; $loro = $go; }
+            else           { $miei = $go; $loro = $gc; }
+
+            if ($miei > $loro) $esito = "VINTA";
+            elseif ($miei < $loro) $esito = "PERSA";
+            else $esito = "PAREGGIATA";
+            echo "$c - $o $gc-$go: <b>$esito</b><br>";
+        }
+    }
+}
+?>

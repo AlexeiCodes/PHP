@@ -1,0 +1,92 @@
+<?php
+// =========================================================
+//  METEO DI DUE SETTIMANE - soluzione con PHP base
+//  Novita': uso la POSIZIONE nel file (giorno $i e giorno $i-1)
+// =========================================================
+
+$righe = file("../meteo.txt");
+
+// ---------- LETTURA in array NUMERATI (l'ordine conta!) ----------
+for ($i = 0; $i < count($righe); $i++)
+{
+    $parti = explode(",", $righe[$i]);
+    $data[$i] = $parti[0];
+    $min[$i]  = $parti[1];
+    $max[$i]  = $parti[2];
+    $pioggia[$i] = $parti[3];
+    settype($min[$i], "integer");
+    settype($max[$i], "integer");
+    settype($pioggia[$i], "integer");
+}
+$giorni = count($data);
+
+// ---------- 1) ESCURSIONE ----------
+echo "<h2>1) Escursione termica</h2><table border=1><tr><th>Data</th><th>Min</th><th>Max</th><th>Escursione</th></tr>";
+for ($i = 0; $i < $giorni; $i++)
+    echo "<tr><td>$data[$i]</td><td>$min[$i]</td><td>$max[$i]</td><td>" . ($max[$i] - $min[$i]) . "</td></tr>";
+echo "</table>";
+
+// ---------- 2) MAGGIORE AUMENTO TRA DUE GIORNI CONSECUTIVI ----------
+// parto da 1 perche' il giorno 0 non ha un giorno prima
+$aumentoMax = -100;
+for ($i = 1; $i < $giorni; $i++)
+    if ($max[$i] - $max[$i - 1] > $aumentoMax) $aumentoMax = $max[$i] - $max[$i - 1];
+echo "<h2>2) Maggiore aumento della massima</h2>";
+for ($i = 1; $i < $giorni; $i++)
+    if ($max[$i] - $max[$i - 1] == $aumentoMax)
+        printf("dal %s al %s: %+d gradi<br>", $data[$i - 1], $data[$i], $aumentoMax);
+
+// ---------- 3) SERIE PIU' LUNGA DI GIORNI DI PIOGGIA ----------
+$serie = 0;
+$serieMax = 0;
+$inizioMax = "";
+for ($i = 0; $i < $giorni; $i++)
+{
+    if ($pioggia[$i] > 0)
+    {
+        $serie = $serie + 1;                       // la serie continua
+        if ($serie > $serieMax)
+        {
+            $serieMax = $serie;
+            $inizioMax = $data[$i - $serie + 1];   // la serie e' iniziata $serie-1 giorni fa
+        }
+    }
+    else
+        $serie = 0;                                // non piove: la serie si azzera
+}
+echo "<h2>3) Serie piu' lunga di pioggia</h2>";
+echo "$serieMax giorni di fila, a partire dal $inizioMax";
+
+// ---------- 4) SOPRA LA MEDIA DELLE MASSIME (due passate) ----------
+$somma = 0;
+for ($i = 0; $i < $giorni; $i++) $somma = $somma + $max[$i];
+$media = $somma / $giorni;
+printf("<h2>4) Giorni sopra la media delle massime (%.1f)</h2>", $media);
+for ($i = 0; $i < $giorni; $i++)
+    if ($max[$i] > $media) echo "$data[$i] ($max[$i] gradi)<br>";
+
+// ---------- 5) PIOGGIA TRA DUE DATE ----------
+echo "<h2>5) Pioggia tra due date</h2><form action='' method='get'>";
+echo "Dal <input type='text' name='da' size='5'> al <input type='text' name='a' size='5'> ";
+echo "<input type='submit' value='Calcola'></form>";
+if (isset($_GET["da"]) && isset($_GET["a"]))
+{
+    // cerco la POSIZIONE delle due date
+    $posDa = -1;
+    $posA  = -1;
+    for ($i = 0; $i < $giorni; $i++)
+    {
+        if ($data[$i] == trim($_GET["da"])) $posDa = $i;
+        if ($data[$i] == trim($_GET["a"]))  $posA  = $i;
+    }
+    if ($posDa == -1 || $posA == -1)
+        echo "Data non trovata";
+    else
+    {
+        if ($posDa > $posA) { $tmp = $posDa; $posDa = $posA; $posA = $tmp; }  // se sono al contrario le scambio
+        $totale = 0;
+        for ($i = $posDa; $i <= $posA; $i++) $totale = $totale + $pioggia[$i];
+        echo "Pioggia dal $data[$posDa] al $data[$posA]: $totale mm";
+    }
+}
+?>

@@ -1,111 +1,98 @@
-# 1 – Moduli (form) HTML
+1 - MODULI (FORM) HTML
+======================
 
-## Lo schema base
-```html
+SCHEMA BASE
+-----------
 <form action="pagina.php" method="get">
     Nome: <input type="text" name="nome">
     <input type="submit" value="Invia">
 </form>
-```
-| Attributo | Significato |
-|---|---|
-| `action` | **a quale file PHP** vanno i dati. Vuoto (`action=""`) o assente = la pagina stessa |
-| `method` | `get` (default) o `post` |
-| `name` | **il nome con cui il dato arriva a PHP**. Senza `name` il campo NON viene inviato! |
-| `value` | il valore inviato (o il valore iniziale del campo) |
 
-## GET o POST?
-| | GET | POST |
-|---|---|---|
-| Dove finiscono i dati | nell'URL: `pagina.php?nome=Luca&eta=17` | nascosti nella richiesta |
-| In PHP | `$_GET["nome"]` | `$_POST["nome"]` |
-| Quando | ricerche, prove, link | password, tanti dati |
+  action  = a quale file PHP vanno i dati
+            (action="" oppure niente = la pagina stessa)
+  method  = get (default) oppure post
+  name    = il NOME con cui il dato arriva a PHP.
+            Senza name il campo NON viene inviato!
+  value   = il valore inviato (o il valore iniziale)
 
-`$_REQUEST["nome"]` funziona in **entrambi** i casi.
 
----
+GET o POST?
+-----------
+  GET   -> i dati si vedono nell'URL:  pagina.php?nome=Luca&eta=17
+           in PHP:  $_GET["nome"]
+  POST  -> i dati non si vedono nell'URL
+           in PHP:  $_POST["nome"]
+  $_REQUEST["nome"] funziona in tutti e due i casi.
 
-## Tutti i campi
 
-### Testo, numero, password, area di testo
-```html
-<input type="text" name="cognome">
-<input type="number" name="eta" min="1" max="99" value="18">
-<input type="password" name="pwd" maxlength="8">
-<textarea name="note" rows="4" cols="40"></textarea>
-```
-→ in PHP: `$_GET["cognome"]`, `$_GET["eta"]`, …  
-⚠️ arrivano **sempre come stringhe**: per fare conti usa `settype($eta, "integer");`
+I CAMPI
+-------
+TESTO / NUMERO / PASSWORD / AREA DI TESTO
+  <input type="text" name="cognome">
+  <input type="number" name="eta" min="1" max="99" value="18">
+  <input type="password" name="pwd">
+  <textarea name="note" rows="4" cols="40"></textarea>
 
-### Radio (UNA sola scelta)
-Stesso `name` per tutto il gruppo, `value` diversi:
-```html
-<input type="radio" name="classe" value="5A"> 5A
-<input type="radio" name="classe" value="5B" checked> 5B
-```
-→ `$_GET["classe"]` vale `"5B"`
+  ATTENZIONE: arrivano SEMPRE come stringhe.
+  Per fare i conti:  settype($eta, "integer");
 
-### Checkbox (scelte multiple)
-**Con le quadre `[]`** → arriva un ARRAY con solo le caselle spuntate:
-```html
-<input type="checkbox" name="tab[]" value="2"> Tabellina del 2
-<input type="checkbox" name="tab[]" value="5"> Tabellina del 5
-```
-→ `$_GET["tab"]` = `["2", "5"]`  
-⚠️ se non spunti niente, `$_GET["tab"]` **non esiste** → controlla con `isset`.
+RADIO (una sola scelta): stesso name, value diversi
+  <input type="radio" name="classe" value="5A"> 5A
+  <input type="radio" name="classe" value="5B" checked> 5B
+  -> $_GET["classe"] vale "5B"
 
-### Select (menu a tendina)
-```html
-<select name="squadra">
-    <option value="Inter">Inter</option>
-    <option value="Milan">Milan</option>
-</select>
-```
-→ `$_GET["squadra"]` = il `value` scelto.
+CHECKBOX (piu' scelte): name con le QUADRE []
+  <input type="checkbox" name="tab[]" value="2"> Tabellina del 2
+  <input type="checkbox" name="tab[]" value="5"> Tabellina del 5
+  -> $_GET["tab"] e' un array:  $_GET["tab"][0] = "2", $_GET["tab"][1] = "5"
+  ATTENZIONE: se non spunti niente, $_GET["tab"] NON ESISTE -> isset
 
-**Select generata da PHP** (molto usata nelle verifiche):
-```php
-echo "<select name='squadra'>";
-foreach ($punti as $nome => $p)
-    echo "<option value='$nome'>$nome</option>";
-echo "</select>";
-```
+SELECT (menu a tendina)
+  <select name="squadra">
+      <option value="Inter">Inter</option>
+      <option value="Milan">Milan</option>
+  </select>
+  -> $_GET["squadra"] = il value scelto
 
-### Hidden (nascosto)
-```html
-<input type="hidden" name="sol[0]" value="30">
-```
-Serve a **portarsi dietro dati** da una pagina all'altra (HTTP non ricorda nulla).
-⚠️ si legge nel sorgente della pagina (Ctrl+U).
+  Select generata da PHP con un for (da un array $nomi):
+    echo "<select name='squadra'>";
+    for ($i = 0; $i < count($nomi); $i++)
+        echo "<option value='" . $nomi[$i] . "'>" . $nomi[$i] . "</option>";
+    echo "</select>";
 
-### Image (immagine cliccabile)
-```html
-<input type="image" src="tabelline2.jpg" name="tab">
-```
-Invia il form e manda le coordinate del click: `$_GET["tab_x"]`, `$_GET["tab_y"]`.
+HIDDEN (nascosto)
+  <input type="hidden" name="saldo" value="100">
+  Serve a PORTARSI DIETRO un dato da una pagina all'altra
+  (il PHP non ricorda niente tra un invio e l'altro).
+  Si vede nel sorgente della pagina (Ctrl+U).
 
-### Pulsanti
-```html
-<input type="submit" value="Invia">     <!-- invia -->
-<input type="reset"  value="Cancella">  <!-- svuota il form -->
-<button>Calcola</button>                <!-- dentro un form = submit -->
-```
+IMAGE (immagine cliccabile) - esercizio tabellina2 del prof
+  <input type="image" src="tabelline2.jpg" name="tab">
+  Invia il form e manda dove hai cliccato: $_GET["tab_x"], $_GET["tab_y"]
 
-### Campi HTML5 utili
-`email`, `date`, `color`, `range`, `tel`, `url` + attributi `required`, `placeholder="..."`,
-`min`, `max`.
+PULSANTI
+  <input type="submit" value="Invia">     invia
+  <input type="reset"  value="Cancella">  svuota il form
+  <button>Calcola</button>                dentro un form = invia
 
----
+ATTRIBUTI UTILI
+  required     il campo e' obbligatorio
+  min / max    limiti di un campo number
+  maxlength    lunghezza massima di un testo
+  checked      radio/checkbox gia' selezionato
 
-## Nomi con le quadre `[]` → array in PHP
-| HTML | Arriva in PHP |
-|---|---|
-| `name="ris[]"` (ripetuto) | `$_GET["ris"][0]`, `[1]`, `[2]`… |
-| `name="ris[0]"`, `name="ris[1]"` | `$_GET["ris"][0]`, `$_GET["ris"][1]` |
-| `name="scelta[$i]"` generato in un ciclo | `$_GET["scelta"][$i]` |
 
-## Vedere cosa arriva (debug)
-```php
-echo "<pre>"; print_r($_GET); echo "</pre>";
-```
-Oppure guarda l'URL (con GET).
+NOMI CON LE QUADRE -> ARRAY IN PHP
+----------------------------------
+  name="ris[]" (ripetuto)          -> $_GET["ris"][0], [1], [2]...
+  name="ris[0]", name="ris[1]"     -> $_GET["ris"][0], $_GET["ris"][1]
+  scorrerli:
+    $ris = $_GET["ris"];
+    for ($i = 0; $i < count($ris); $i++)
+        echo $ris[$i] . "<br>";
+
+
+VEDERE COSA ARRIVA (debug)
+--------------------------
+  Con GET guarda l'URL nella barra del browser.
+  Oppure stampa il campo:  echo $_GET["nome"];

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head><title>Analizzatore di numeri</title></head>
+<body>
+<h2>Analizza un numero</h2>
+<form action="analizza.php" method="get">
+    N: <input type="number" name="n" min="1" required>
+    <input type="submit" value="Analizza">
+</form>
+<h2>Numeri primi tra A e B</h2>
+<form action="analizza.php" method="get">
+    A: <input type="number" name="a" min="1" required>
+    B: <input type="number" name="b" min="1" required>
+    <input type="submit" value="Cerca">
+</form>
+</body>
+</html>

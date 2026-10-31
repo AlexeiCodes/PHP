@@ -1,0 +1,26 @@
+ESERCIZIO IN PHP / simulazione verifica - TORNEO DI CALCETTO
+____________________________________________________________
+LOGICA PRINCIPALE: ORDINARE A MANO CON LO SPAREGGIO
+
+Dato il file (partite.txt) con i risultati del torneo, una riga per partita:
+
+squadra_casa,squadra_ospite,gol_casa,gol_ospite
+
+Esempio:
+Leoni,Tigri,3,1
+Aquile,Squali,2,2
+...
+
+Vittoria 3 punti, pareggio 1, sconfitta 0.
+La DIFFERENZA RETI di una squadra e' gol fatti - gol subiti.
+
+Produrre in output
+__________________
+1) Per ogni squadra: partite giocate, vinte, pareggiate, perse, punti
+2) La classifica ordinata per punti (dal piu' alto). A parita' di punti
+   viene prima la squadra con la differenza reti migliore.
+   L'ordinamento va fatto A MANO (senza funzioni di ordinamento).
+3) Le squadre imbattute (nessuna sconfitta)
+4) La partita/le partite con piu' gol in totale
+5) Un form con un menu a tendina con le squadre: scelta una squadra mostrare
+   le sue partite indicando per ognuna "VINTA", "PAREGGIATA" o "PERSA"

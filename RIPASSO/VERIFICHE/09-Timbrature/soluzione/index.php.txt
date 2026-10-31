@@ -1,0 +1,119 @@
+<?php
+// =========================================================
+//  TIMBRATURE - soluzione con PHP base
+//  Novita': trasformo gli orari in MINUTI, faccio i conti, e li riconverto
+//     "08:15"  ->  8*60 + 15 = 495 minuti
+//     368 minuti -> ore = (368 - 368%60) / 60 = 6,  minuti = 368 % 60 = 8  -> 6:08
+// =========================================================
+
+$righe = file("../badge.txt");
+$limite = 8 * 60 + 10;      // 08:10 in minuti: oltre e' ritardo
+$inizio = 8 * 60;           // 08:00 in minuti
+
+// ---------- LETTURA + 1) TEMPO LAVORATO PER RIGA ----------
+echo "<h2>1) Tempo lavorato</h2><table border=1>";
+echo "<tr><th>Dipendente</th><th>Data</th><th>Entrata</th><th>Uscita</th><th>Lavorato</th></tr>";
+for ($i = 0; $i < count($righe); $i++)
+{
+    $parti = explode(",", $righe[$i]);
+    $dip  = $parti[0];
+    $data = $parti[1];
+
+    // entrata "08:02" -> minuti
+    $hm = explode(":", $parti[2]);
+    $h = $hm[0];  $m = $hm[1];
+    settype($h, "integer");  settype($m, "integer");
+    $ent = $h * 60 + $m;
+
+    // uscita "14:10\n" -> minuti (settype toglie anche il \n)
+    $hm = explode(":", $parti[3]);
+    $h = $hm[0];  $m = $hm[1];
+    settype($h, "integer");  settype($m, "integer");
+    $usc = $h * 60 + $m;
+
+    $lavorato = $usc - $ent;
+    $badge[] = array($dip, $data, $ent, $usc);
+
+    printf("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%d:%02d</td></tr>",
+           $dip, $data, $parti[2], trim($parti[3]),
+           ($lavorato - $lavorato % 60) / 60, $lavorato % 60);
+
+    // caselle per dipendente
+    if (!isset($totale[$dip]))
+    {
+        $totale[$dip] = 0;  $ritardi[$dip] = 0;
+        $sommaEntrate[$dip] = 0;  $giorni[$dip] = 0;
+        $dipendenti[] = $dip;
+    }
+    $totale[$dip] = $totale[$dip] + $lavorato;
+    $sommaEntrate[$dip] = $sommaEntrate[$dip] + $ent;
+    $giorni[$dip]++;
+    if ($ent > $limite) $ritardi[$dip]++;
+
+    // elenco delle date senza ripetizioni (la data come chiave)
+    if (!isset($dataVista[$data]))
+    {
+        $dataVista[$data] = 1;
+        $date[] = $data;
+    }
+}
+echo "</table>";
+
+// ---------- 2) TOTALE PER DIPENDENTE ----------
+echo "<h2>2) Totale ore e ritardi</h2>";
+for ($i = 0; $i < count($dipendenti); $i++)
+{
+    $d = $dipendenti[$i];
+    $t = $totale[$d];
+    printf("%s: %d:%02d ore, ritardi: %d<br>", $d, ($t - $t % 60) / 60, $t % 60, $ritardi[$d]);
+}
+
+// ---------- 3) CHI HA LAVORATO DI PIU' ----------
+$max = -1;
+for ($i = 0; $i < count($dipendenti); $i++)
+    if ($totale[$dipendenti[$i]] > $max) $max = $totale[$dipendenti[$i]];
+echo "<h2>3) Ha lavorato di piu'</h2>";
+for ($i = 0; $i < count($dipendenti); $i++)
+    if ($totale[$dipendenti[$i]] == $max)
+        printf("%s (%d:%02d)<br>", $dipendenti[$i], ($max - $max % 60) / 60, $max % 60);
+
+// ---------- 4) ELENCO RITARDI ----------
+echo "<h2>4) Ritardi</h2>";
+for ($i = 0; $i < count($badge); $i++)
+    if ($badge[$i][2] > $limite)
+        echo $badge[$i][0] . " il " . $badge[$i][1] . ": " . ($badge[$i][2] - $inizio) . " minuti<br>";
+
+// ---------- 5) ENTRATA MEDIA ----------
+echo "<h2>5) Orario medio di entrata</h2>";
+for ($i = 0; $i < count($dipendenti); $i++)
+{
+    $d = $dipendenti[$i];
+    $media = $sommaEntrate[$d] / $giorni[$d];
+    settype($media, "integer");                  // tolgo i decimali
+    printf("%s: %02d:%02d<br>", $d, ($media - $media % 60) / 60, $media % 60);
+}
+
+// ---------- 6) PRIMO AD ENTRARE / ULTIMO AD USCIRE ----------
+echo "<h2>6) Primo e ultimo del giorno</h2><form action='' method='get'><select name='data'>";
+for ($i = 0; $i < count($date); $i++)
+    echo "<option value='$date[$i]'>$date[$i]</option>";
+echo "</select> <input type='submit' value='Mostra'></form>";
+if (isset($_GET["data"]))
+{
+    $scelta = $_GET["data"];
+    $primaEntrata = 99999;
+    $ultimaUscita = -1;
+    for ($i = 0; $i < count($badge); $i++)          // 1 giro: trovo i due orari
+        if ($badge[$i][1] == $scelta)
+        {
+            if ($badge[$i][2] < $primaEntrata) $primaEntrata = $badge[$i][2];
+            if ($badge[$i][3] > $ultimaUscita) $ultimaUscita = $badge[$i][3];
+        }
+    for ($i = 0; $i < count($badge); $i++)          // 2 giro: trovo chi
+        if ($badge[$i][1] == $scelta)
+        {
+            if ($badge[$i][2] == $primaEntrata) echo "Primo a entrare: " . $badge[$i][0] . "<br>";
+            if ($badge[$i][3] == $ultimaUscita) echo "Ultimo a uscire: " . $badge[$i][0] . "<br>";
+        }
+}
+?>

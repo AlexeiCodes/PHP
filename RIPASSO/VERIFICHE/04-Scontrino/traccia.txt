@@ -1,0 +1,23 @@
+ESERCIZIO IN PHP / simulazione verifica - SCONTRINO
+___________________________________________________
+LOGICA PRINCIPALE: COLLEGARE DUE FILE (il prezzo e' in un file, la quantita' nell'altro)
+
+Sono dati due file.
+
+listino.txt  (prodotto,prezzo):        ordine.txt  (prodotto,quantita):
+Pane,2.40                              Pane,2
+Latte,1.30                             Latte,3
+...                                    ...
+
+Produrre in output
+__________________
+1) Lo scontrino: per ogni riga dell'ordine prodotto, quantita, prezzo
+   unitario e totale riga (2 decimali)
+2) I prodotti dell'ordine che NON sono nel listino, scritti in rosso con
+   "non disponibile" (non vanno sommati nel totale)
+3) Il totale; se supera 30 euro applicare uno sconto del 10% e mostrare
+   totale, sconto e totale da pagare
+4) Il prodotto su cui si e' speso di piu'
+5) I prodotti del listino che NON sono stati ordinati
+6) Un form con un menu a tendina con i prodotti del listino e un campo
+   numerico per la quantita': mostrare quanto si spenderebbe

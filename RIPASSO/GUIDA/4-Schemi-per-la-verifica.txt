@@ -1,13 +1,12 @@
-# 4 – Schemi per la verifica ⭐
+4 - SCHEMI PER LA VERIFICA
+==========================
+Ogni verifica e' fatta combinando alcuni di questi "pezzi".
+Solo for, if, array e le funzioni del file 3.
 
-Quasi tutte le verifiche "stile SquadreCalcio" si risolvono **combinando questi pezzi**.
-Impara gli schemi, poi cambi solo i nomi delle variabili.
 
----
-
-## Schema A – Leggere il file riga per riga
-File `dati.txt`: `Inter,Milan,2,0`
-```php
+A) LEGGERE UN FILE RIGA PER RIGA
+--------------------------------
+File:  Inter,Milan,2,0
 $righe = file("dati.txt");
 for ($i = 0; $i < count($righe); $i++)
 {
@@ -16,149 +15,180 @@ for ($i = 0; $i < count($righe); $i++)
     $ospite = $parti[1];
     $gc     = $parti[2];
     $go     = $parti[3];
-    settype($gc, "integer");     // numero
-    settype($go, "integer");     // numero (toglie anche il \n finale)
-    // ... qui uso i dati ...
+    settype($gc, "integer");
+    settype($go, "integer");      // l'ultimo campo ha il \n: settype lo toglie
 }
-```
-⚠️ L'**ultimo** campo della riga ha il `\n` attaccato.
-- se è un numero → `settype` lo toglie;
-- se è un testo → usa `trim($parti[3])`.
+- ultimo campo NUMERO -> settype
+- ultimo campo TESTO  -> trim($parti[3])
+- niente righe vuote in fondo al file!
 
-⚠️ Niente righe vuote in fondo al file (darebbero errore).
 
----
-
-## Schema B – Creare la casella e CONTARE (quante volte?)
-"Quante partite ha giocato ogni squadra?"
-```php
-if (!isset($giocate[$casa])) $giocate[$casa] = 0;   // casella nuova = 0
-$giocate[$casa] = $giocate[$casa] + 1;              // +1
-```
-
-## Schema C – SOMMARE (quanto in totale?)
-"Quanti gol ha segnato ogni squadra?"
-```php
-if (!isset($gol[$casa])) $gol[$casa] = 0;
-$gol[$casa] = $gol[$casa] + $gc;                    // + il valore
-```
-
-## Schema D – MEDIA
-Servono **due** array: la somma e il conteggio.
-```php
-// nel ciclo:
-if (!isset($somma[$nome])) { $somma[$nome] = 0; $num[$nome] = 0; }
-$somma[$nome] = $somma[$nome] + $voto;
-$num[$nome]   = $num[$nome] + 1;
-
-// dopo il ciclo:
-foreach ($somma as $nome => $s)
+B) "PER OGNI ..." -> CASELLA CON IL NOME + ELENCO DEI NOMI
+----------------------------------------------------------
+(dentro il ciclo di lettura)
+if (!isset($punti[$squadra]))
 {
-    $media = $s / $num[$nome];
-    printf("%s: %.2f<br>", $nome, $media);
+    $punti[$squadra] = 0;       // casella nuova = 0
+    $nomi[] = $squadra;         // la ricordo nell'elenco
 }
-```
+Poi:  CONTARE   $quante[$x] = $quante[$x] + 1;
+      SOMMARE   $tot[$x]    = $tot[$x] + $valore;
+Stampa (dopo il ciclo):
+for ($i = 0; $i < count($nomi); $i++)
+    echo $nomi[$i] . ": " . $punti[$nomi[$i]] . "<br>";
 
-## Schema E – MASSIMO (chi ha di più? anche a pari merito)
-Due giri: prima trovo il valore massimo, poi stampo **tutti** quelli che lo hanno.
-```php
-$max = -1;                                  // più piccolo di ogni valore possibile
-foreach ($gol as $squadra => $g)
-    if ($g > $max) $max = $g;
 
-echo "Più gol ($max): ";
-foreach ($gol as $squadra => $g)
-    if ($g == $max) echo "$squadra ";
-```
-Per il **minimo**: parti da un numero enorme (`$min = 999999;`) e usa `<`.
-
-## Schema F – CLASSIFICA (ordinare dal più alto)
-```php
-arsort($punti);                 // ordina i valori dal più grande, tiene i nomi
-$pos = 1;
-echo "<table border=1>";
-foreach ($punti as $squadra => $p)
+C) MEDIA
+--------
+servono la SOMMA e il NUMERO, la divisione si fa ALLA FINE
+for ($i = 0; $i < count($nomi); $i++)
 {
-    echo "<tr><td>$pos</td><td>$squadra</td><td>$p</td></tr>";
-    $pos++;
+    $n = $nomi[$i];
+    printf("%s: %.2f<br>", $n, $somma[$n] / $num[$n]);
 }
-echo "</table>";
-```
 
-## Schema G – ELENCO in ordine alfabetico
-```php
-ksort($punti);                          // ordina per chiave (nome)
-foreach ($punti as $squadra => $p) echo "$squadra<br>";
-```
 
-## Schema H – Salvare la riga intera (per cercarla dopo)
-```php
-// nel ciclo di lettura:
-$partite[] = array($casa, $ospite, $gc, $go);
+D) MASSIMO (con i pari merito)  -  "la squadra/le squadre con piu' ..."
+-----------------------------------------------------------------------
+$max = -1;
+for ($i = 0; $i < count($nomi); $i++)          // 1 giro: QUAL E' il massimo
+    if ($gol[$nomi[$i]] > $max) $max = $gol[$nomi[$i]];
+for ($i = 0; $i < count($nomi); $i++)          // 2 giro: CHI ce l'ha
+    if ($gol[$nomi[$i]] == $max) echo $nomi[$i] . "<br>";
+MINIMO: parti da un numero enorme ($min = 999999) e usa <
 
-// dopo: tutte le partite di una squadra
+
+E) ORDINARE A MANO (bubble sort)  -  classifica o ordine alfabetico
+-------------------------------------------------------------------
+Ordino l'elenco $nomi in base a $punti (dal piu' alto):
+for ($i = 0; $i < count($nomi) - 1; $i++)
+    for ($j = 0; $j < count($nomi) - 1 - $i; $j++)
+        if ($punti[$nomi[$j]] < $punti[$nomi[$j + 1]])     // sono al contrario?
+        {
+            $tmp = $nomi[$j];                // scambio i due NOMI
+            $nomi[$j] = $nomi[$j + 1];
+            $nomi[$j + 1] = $tmp;
+        }
+- dal piu' piccolo: usa >  invece di <
+- ordine alfabetico:  if ($nomi[$j] > $nomi[$j + 1])   (le stringhe si confrontano!)
+- SPAREGGIO (a pari punti conta la differenza reti):
+  if ($punti[$a] < $punti[$b] || ($punti[$a] == $punti[$b] && $diff[$a] < $diff[$b]))
+
+
+F) SALVARE LE RIGHE INTERE E CERCARE
+------------------------------------
+(nel ciclo di lettura)   $partite[] = array($casa, $ospite, $gc, $go);
+(dopo)
+$trovato = 0;
 for ($i = 0; $i < count($partite); $i++)
     if ($partite[$i][0] == $scelta || $partite[$i][1] == $scelta)
-        echo $partite[$i][0]." - ".$partite[$i][1]." ".$partite[$i][2]."-".$partite[$i][3]."<br>";
-```
+    {
+        echo $partite[$i][0] . " - " . $partite[$i][1] . "<br>";
+        $trovato = 1;
+    }
+if ($trovato == 0) echo "Nessun risultato";
+Senza badare a maiuscole:  strtoupper($a) == strtoupper($b)
 
-## Schema I – Form per scegliere (select generata) + risultato nella stessa pagina
-```php
-echo "<form action='' method='get'>";
-echo "<select name='scelta'>";
-foreach ($punti as $squadra => $p)
-    echo "<option value='$squadra'>$squadra</option>";
-echo "</select> <input type='submit' value='Cerca'>";
-echo "</form>";
 
-if (isset($_GET["scelta"]))
+G) RIGHE CONSECUTIVE (confronto con la riga PRIMA)
+--------------------------------------------------
+"il maggior aumento tra un giorno e il successivo", "giorni di fila"
+for ($i = 1; $i < count($temp); $i++)          // parto da 1!
 {
-    $scelta = $_GET["scelta"];
-    // ... Schema H ...
+    $differenza = $temp[$i] - $temp[$i - 1];   // questa - quella prima
 }
-```
+SERIE PIU' LUNGA (es. giorni di pioggia di fila):
+$serie = 0;  $serieMax = 0;
+for ($i = 0; $i < count($pioggia); $i++)
+{
+    if ($pioggia[$i] > 0) $serie = $serie + 1;   // continua la serie
+    else $serie = 0;                             // la serie si interrompe
+    if ($serie > $serieMax) $serieMax = $serie;
+}
 
-## Schema J – Creare un file HTML in output
-```php
-$html = "<html><body><h1>Squadre</h1><ul>\n";
-foreach ($punti as $squadra => $p)
-    $html = $html . "<li>$squadra</li>\n";
-$html = $html . "</ul></body></html>";
-file_put_contents("squadre.html", $html);
-echo "<a href='squadre.html'>Apri squadre.html</a>";
-```
 
-## Schema K – Test con domande da file (stile TestVeroFalso)
-```php
-// 1) mostro le domande
-$righe = file("domande.txt");
-echo "<form action='correggi.php' method='get'>";
-for ($i = 0; $i < count($righe); $i++) {
+H) DUE FILE COLLEGATI
+---------------------
+1) leggo il primo file in un array con chiave-parola:
+   $prezzo["Penna"] = 1.20;
+2) leggo il secondo e uso la chiave per prendere il dato:
+   if (isset($prezzo[$prodotto])) $totale = $quantita * $prezzo[$prodotto];
+   else echo "Prodotto $prodotto non in listino";
+
+
+I) STRINGA CARATTERE PER CARATTERE (controlli)
+----------------------------------------------
+$maiuscole = 0;  $cifre = 0;
+for ($i = 0; $i < strlen($pwd); $i++)
+{
+    $c = substr($pwd, $i, 1);
+    if ($c >= "A" && $c <= "Z") $maiuscole++;
+    if ($c >= "0" && $c <= "9") $cifre++;
+    if ($c == "@") $chiocciole++;
+}
+Controllo di un formato (es. targa AB123CD):
+substr($t, 0, 1) deve essere una lettera, substr($t, 2, 1) una cifra, ...
+
+
+J) GRIGLIA / MATRICE DA FILE
+----------------------------
+File (una riga = una riga della griglia):   XX--X
+for ($r = 0; $r < count($righe); $r++)
+{
+    $riga = trim($righe[$r]);
+    for ($c = 0; $c < strlen($riga); $c++)
+        $griglia[$r][$c] = substr($riga, $c, 1);
+}
+Vicini a destra:  $griglia[$r][$c + 1]  (attento a non uscire: $c + 1 < strlen)
+
+
+K) NUMERI CON I CICLI
+---------------------
+divisibile:   if ($n % $d == 0)
+cifre di un numero:   while ($n > 0) { $cifra = $n % 10;  $n = ($n - $cifra) / 10; }
+binario:              while ($n > 0) { $bit = $n % 2;  $bin = $bit . $bin;  $n = ($n - $bit) / 2; }
+primo:  conto i divisori da 1 a $n: e' primo se sono esattamente 2
+
+
+L) ORARI "08:15"
+----------------
+$p = explode(":", "08:15");
+$h = $p[0];  $m = $p[1];
+settype($h, "integer");  settype($m, "integer");
+$minuti = $h * 60 + $m;                        // tutto in minuti
+di nuovo in ore:  $h = ($min - $min % 60) / 60;   $m = $min % 60;
+printf("%02d:%02d", $h, $m);                   // 08:05
+
+
+M) PORTARSI DIETRO UN DATO (hidden)
+-----------------------------------
+Il PHP non ricorda niente: ogni invio riparte da zero.
+if (isset($_GET["saldo"])) { $saldo = $_GET["saldo"]; settype($saldo, "integer"); }
+else $saldo = 100;                               // prima volta
+... modifico $saldo ...
+echo "<input type='hidden' name='saldo' value='$saldo'>";   // lo rimetto nel form
+
+
+N) CORREGGERE UN TEST
+---------------------
+$ris = $_GET["ris"];                        // risposte (name="ris[$i]")
+for ($i = 0; $i < count($righe); $i++)
+{
     $parti = explode(";", $righe[$i]);
-    echo $parti[0]."<br>";
-    echo "<input type=radio name=ris[$i] value=V> V ";
-    echo "<input type=radio name=ris[$i] value=F> F<br>";
+    $giusta = trim($parti[1]);
+    if (!isset($ris[$i]))         $nonDate++;   // non ha risposto
+    elseif ($ris[$i] == $giusta)  $giuste++;
+    else                          $sbagliate++;
 }
-echo "<input type=submit></form>";
+printf("%.0f/100", $giuste / count($righe) * 100);
 
-// 2) correggi.php: rileggo il file e confronto
-$ris = $_GET["ris"];
-$giuste = 0;
-for ($i = 0; $i < count($righe); $i++) {
-    $parti = explode(";", $righe[$i]);
-    if (isset($ris[$i]) && $ris[$i] == trim($parti[1])) $giuste++;
-}
-echo "Punteggio: ".round($giuste / count($righe) * 100)."/100";
-```
-Domande in ordine casuale senza ripetizioni: `array_rand` + `unset` (vedi Soluzione1 del prof).
 
----
-
-## Checklist prima di consegnare
-- [ ] `settype` sui numeri letti dal file, `trim` sull'ultimo campo se è testo
-- [ ] `isset` prima di sommare in una casella nuova
-- [ ] massimo/minimo: considerati i **pari merito**?
-- [ ] classifica: `arsort` (non `sort`, che perde i nomi!)
-- [ ] ordine alfabetico: `ksort` sulle chiavi oppure `sort` su un array di nomi
-- [ ] il form ha `name` su ogni campo?
-- [ ] `isset($_GET[...])` prima di leggere un dato del form
+CHECKLIST PRIMA DI CONSEGNARE
+-----------------------------
+[ ] settype sui numeri del file, trim sull'ultimo campo se e' testo
+[ ] isset prima di usare una casella nuova (e aggiungo il nome all'elenco)
+[ ] massimo/minimo: ho stampato TUTTI quelli a pari merito?
+[ ] ordinamento: scambio i NOMI, non i valori
+[ ] ogni campo del form ha name
+[ ] isset($_GET[...]) prima di leggere un dato del form
+[ ] dati dal form -> settype se servono numeri

@@ -1,0 +1,124 @@
+<?php
+// =========================================================
+//  MODULO DI REGISTRAZIONE - soluzione con PHP base
+//  Novita': controllo i caratteri uno alla volta con substr
+// =========================================================
+
+$nome    = trim($_POST["nome"]);
+$cognome = trim($_POST["cognome"]);
+$eta     = $_POST["eta"];
+$email   = trim($_POST["email"]);
+$pwd     = $_POST["pwd"];
+$pwd2    = $_POST["pwd2"];
+settype($eta, "integer");
+
+$errori = 0;      // contatore degli errori
+
+// ---------- NOME E COGNOME ----------
+// metto i due campi in un array cosi' faccio lo stesso controllo con un solo for
+$campi    = array($nome, $cognome);
+$etichette = array("Nome", "Cognome");
+for ($k = 0; $k < 2; $k++)
+{
+    $s = $campi[$k];
+    if (strlen($s) < 2)
+    {
+        echo $etichette[$k] . ": almeno 2 caratteri<br>";
+        $errori++;
+    }
+    $cifre = 0;
+    for ($i = 0; $i < strlen($s); $i++)
+    {
+        $c = substr($s, $i, 1);
+        if ($c >= "0" && $c <= "9") $cifre++;
+    }
+    if ($cifre > 0)
+    {
+        echo $etichette[$k] . ": non deve contenere cifre<br>";
+        $errori++;
+    }
+}
+
+// ---------- ETA' ----------
+if ($eta < 14 || $eta > 99)
+{
+    echo "Eta': deve essere tra 14 e 99<br>";
+    $errori++;
+}
+
+// ---------- EMAIL ----------
+$chiocciole = 0;
+$posChiocciola = -1;
+$puntiDopo = 0;
+for ($i = 0; $i < strlen($email); $i++)
+{
+    $c = substr($email, $i, 1);
+    if ($c == "@")
+    {
+        $chiocciole++;
+        $posChiocciola = $i;
+    }
+    if ($c == "." && $posChiocciola != -1) $puntiDopo++;   // punto DOPO la @
+}
+if ($chiocciole != 1)
+{
+    echo "Email: ci deve essere una sola @<br>";
+    $errori++;
+}
+elseif ($posChiocciola == 0 || $posChiocciola == strlen($email) - 1)
+{
+    echo "Email: la @ non puo' essere all'inizio o alla fine<br>";
+    $errori++;
+}
+elseif ($puntiDopo == 0)
+{
+    echo "Email: manca il punto dopo la @<br>";
+    $errori++;
+}
+
+// ---------- PASSWORD ----------
+$maiuscole = 0;  $minuscole = 0;  $numeri = 0;  $speciali = 0;
+for ($i = 0; $i < strlen($pwd); $i++)
+{
+    $c = substr($pwd, $i, 1);
+    if ($c >= "A" && $c <= "Z")      $maiuscole++;
+    elseif ($c >= "a" && $c <= "z")  $minuscole++;
+    elseif ($c >= "0" && $c <= "9")  $numeri++;
+    else                             $speciali++;     // ne' lettera ne' cifra
+}
+if (strlen($pwd) < 8)  { echo "Password: almeno 8 caratteri<br>"; $errori++; }
+if ($maiuscole == 0)   { echo "Password: serve almeno una maiuscola<br>"; $errori++; }
+if ($minuscole == 0)   { echo "Password: serve almeno una minuscola<br>"; $errori++; }
+if ($numeri == 0)      { echo "Password: serve almeno una cifra<br>"; $errori++; }
+if ($pwd != $pwd2)     { echo "Le due password non sono uguali<br>"; $errori++; }
+
+// ---------- RUOLO (radio: se non scelto non arriva!) ----------
+if (!isset($_POST["ruolo"]))
+{
+    echo "Ruolo: scegli studente o docente<br>";
+    $errori++;
+}
+
+// ---------- RISULTATO ----------
+if ($errori > 0)
+{
+    echo "<p><b>$errori errori trovati.</b> <a href='registrazione.html'>Torna al modulo</a></p>";
+}
+else
+{
+    echo "<h2>Registrazione completata</h2>";
+
+    // username: 3 lettere del cognome (o meno se e' corto) + iniziale del nome + eta'
+    if (strlen($cognome) < 3) $parte1 = $cognome;
+    else $parte1 = substr($cognome, 0, 3);
+    $username = strtoupper($parte1) . strtoupper(substr($nome, 0, 1)) . $eta;
+    echo "Ruolo: " . $_POST["ruolo"] . "<br>";
+    echo "Il tuo username: <b>$username</b><br>";
+
+    // forza della password
+    if (strlen($pwd) >= 12 && $speciali > 0) $forza = "FORTE";
+    elseif (strlen($pwd) >= 9) $forza = "MEDIA";
+    else $forza = "DEBOLE";
+    echo "Forza della password: $forza";
+}
+?>

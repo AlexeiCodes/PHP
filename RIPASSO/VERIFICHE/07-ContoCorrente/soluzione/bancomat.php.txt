@@ -1,0 +1,87 @@
+<?php
+// =========================================================
+//  CONTO CORRENTE - soluzione con PHP base
+//  Novita': il PHP NON ricorda niente tra un invio e l'altro.
+//  I dati li rimetto ogni volta nel form come campi hidden.
+// =========================================================
+
+// ---------- 1) RECUPERO I DATI (o parto da zero) ----------
+if (isset($_GET["saldo"]))
+{
+    $saldo     = $_GET["saldo"];
+    $operazioni = $_GET["operazioni"];
+    $storico   = $_GET["storico"];
+    $saldoMax  = $_GET["saldomax"];
+    settype($saldo, "integer");
+    settype($operazioni, "integer");
+    settype($saldoMax, "integer");
+}
+else
+{
+    // prima volta che apro la pagina
+    $saldo = 100;
+    $operazioni = 0;
+    $storico = "";
+    $saldoMax = 100;
+}
+
+// ---------- 3) ESEGUO L'OPERAZIONE (se e' stata inviata) ----------
+if (isset($_GET["importo"]))
+{
+    $importo = $_GET["importo"];
+    settype($importo, "integer");
+
+    if (!isset($_GET["tipo"]))
+        echo "<font color=red>Scegli deposito o prelievo</font><br>";
+    elseif ($importo <= 0)
+        echo "<font color=red>L'importo deve essere maggiore di 0</font><br>";
+    elseif ($_GET["tipo"] == "prelievo" && $importo > 250)
+        echo "<font color=red>Non puoi prelevare piu' di 250 euro alla volta</font><br>";
+    elseif ($_GET["tipo"] == "prelievo" && $importo > $saldo)
+        echo "<font color=red>Saldo insufficiente</font><br>";
+    else
+    {
+        // operazione valida
+        if ($_GET["tipo"] == "deposito")
+        {
+            $saldo = $saldo + $importo;
+            $storico = $storico . "+" . $importo . "  ";
+        }
+        else
+        {
+            $saldo = $saldo - $importo;
+            $storico = $storico . "-" . $importo . "  ";
+        }
+        $operazioni++;
+        if ($saldo > $saldoMax) $saldoMax = $saldo;      // 6) saldo massimo
+        echo "<font color=green>Operazione eseguita</font><br>";
+    }
+}
+
+// ---------- 2) e 4) SITUAZIONE ----------
+echo "<h2>Saldo: $saldo euro</h2>";
+echo "Operazioni riuscite: $operazioni<br>";
+echo "Storico: $storico<br>";
+echo "Saldo piu' alto raggiunto: $saldoMax euro<br><br>";
+
+// ---------- 5) BLOCCO DOPO 5 OPERAZIONI ----------
+if ($operazioni >= 5)
+{
+    echo "<b>Limite di operazioni raggiunto</b><br>";
+    echo "<a href='bancomat.php'>Ricomincia da capo</a>";
+}
+else
+{
+    echo "<form action='' method='get'>";
+    echo "<input type='radio' name='tipo' value='deposito'> Deposito ";
+    echo "<input type='radio' name='tipo' value='prelievo'> Prelievo<br>";
+    echo "Importo: <input type='number' name='importo'> ";
+    echo "<input type='submit' value='Esegui'>";
+    // i dati da ricordare tornano indietro con il prossimo invio
+    echo "<input type='hidden' name='saldo' value='$saldo'>";
+    echo "<input type='hidden' name='operazioni' value='$operazioni'>";
+    echo "<input type='hidden' name='storico' value='$storico'>";
+    echo "<input type='hidden' name='saldomax' value='$saldoMax'>";
+    echo "</form>";
+}
+?>

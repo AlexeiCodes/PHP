@@ -1,0 +1,24 @@
+ESERCIZIO IN PHP / simulazione verifica - ANALIZZATORE DI NUMERI
+________________________________________________________________
+LOGICA PRINCIPALE: ALGORITMI CON I CICLI (divisori, cifre, resto %)
+(non ci sono file di dati)
+
+1) Una pagina HTML (numeri.html) con un form con un campo numerico N
+   (numero intero positivo)
+
+2) Il programma PHP deve mostrare per il numero N:
+   a) se e' pari o dispari
+   b) l'elenco dei suoi divisori e quanti sono
+   c) se e' PRIMO (ha esattamente 2 divisori)
+   d) se e' PERFETTO (la somma dei divisori escluso se stesso e' uguale a N,
+      es. 6 = 1+2+3)
+   e) la somma delle sue cifre (es. 472 -> 13)
+   f) il numero scritto al contrario (es. 472 -> 274) e se e' PALINDROMO
+      (uguale al contrario, es. 1221)
+   g) il numero in binario (es. 13 -> 1101)
+   Se N non e' maggiore di 0 scrivere un errore.
+
+3) Un secondo form con due numeri A e B: mostrare tutti i numeri primi tra
+   A e B in una tabella da 5 colonne, e quanti sono
+
+Usare solo cicli, if e operatori (% / * + -), senza funzioni matematiche.

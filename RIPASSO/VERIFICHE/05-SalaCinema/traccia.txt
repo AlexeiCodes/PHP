@@ -1,0 +1,26 @@
+ESERCIZIO IN PHP / simulazione verifica - SALA DEL CINEMA
+_________________________________________________________
+LOGICA PRINCIPALE: GRIGLIA (ogni riga del file e' una fila, ogni carattere un posto)
+
+Dato il file (posti.txt) con la piantina della sala:
+X = posto occupato     - = posto libero
+
+XXXX--XXXX
+XX-XXXX-XX
+X--X--X--X
+...
+
+La prima riga e' la fila 1, il primo carattere e' il posto 1.
+
+Produrre in output
+__________________
+1) La piantina come tabella HTML: posti liberi in verde, occupati in rosso,
+   con il numero della fila all'inizio di ogni riga
+2) Per ogni fila il numero di posti liberi, e il totale dei posti liberi
+3) La fila/le file con piu' posti liberi e le file "TUTTO ESAURITO"
+4) La prima coppia di posti VICINI liberi (due "-" uno accanto all'altro)
+   per chi va al cinema in due: indicare fila e posti
+5) Un form con due campi numerici (fila e posto): dire se il posto e'
+   "LIBERO", "OCCUPATO" oppure "POSTO INESISTENTE"
+6) Facoltativo: un form con un campo numerico N: trovare la prima fila
+   che ha N posti liberi vicini

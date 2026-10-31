@@ -1,46 +1,54 @@
-# RIPASSO PHP – 5B
+RIPASSO PHP - 5B
+================
 
-Cartella pensata per **ripassare e prepararsi alla verifica**.
+Tutte le soluzioni usano SOLO:
+  for, while, if, array (anche con chiavi-parola), ordinamento a mano,
+  file, explode, settype, count, strlen, substr, strtoupper, trim, isset,
+  echo, printf
+NIENTE foreach, sort, in_array, implode, rand, round, function...
 
-## 📘 GUIDA (da consultare)
-| File | Cosa trovi |
-|---|---|
-| [GUIDA/1-Form-HTML.txt](GUIDA/1-Form-HTML.txt) | Tutti i campi dei moduli HTML e come arrivano a PHP |
-| [GUIDA/2-PHP-base.txt](GUIDA/2-PHP-base.txt) | Variabili, if, cicli, array, array associativi |
-| [GUIDA/3-Funzioni-PHP.txt](GUIDA/3-Funzioni-PHP.txt) | Le funzioni viste in classe, in ordine alfabetico, con esempio |
-| [GUIDA/4-Schemi-per-la-verifica.txt](GUIDA/4-Schemi-per-la-verifica.txt) | **I "pezzi" che si ripetono in ogni esercizio**: leggere un file, contare, sommare, trovare il massimo, classifica, form… |
 
-## 📝 VERIFICHE (stile "SquadreCalcio")
-Ogni cartella ha:
-- `traccia.txt` → il testo della verifica (leggi solo questo e prova da solo!)
-- un file di dati `.txt`
-- `soluzione/` → soluzione commentata riga per riga (file `.php.txt`)
+GUIDA (da consultare)
+---------------------
+GUIDA/1-Form-HTML.txt              tutti i campi dei form e come arrivano a PHP
+GUIDA/2-PHP-base.txt               variabili, if, cicli, array, come scorrere
+                                   un array con chiavi-parola usando il for
+GUIDA/3-Funzioni-PHP.txt           le funzioni che usiamo, con esempi
+GUIDA/4-Schemi-per-la-verifica.txt I "PEZZI" da combinare (da A a N):
+                                   leggere file, contare, media, massimo,
+                                   ordinare a mano, righe consecutive, due file,
+                                   carattere per carattere, griglie, cicli sui
+                                   numeri, orari, hidden, correzione test
 
-| # | Verifica | Argomenti |
-|---|---|---|
-| 1 | [VERIFICHE/1-VotiScuola](VERIFICHE/1-VotiScuola) | file, array associativi, medie, massimo, form con select |
-| 2 | [VERIFICHE/2-Negozio](VERIFICHE/2-Negozio) | somme, incassi, classifica (arsort), file HTML in output |
-| 3 | [VERIFICHE/3-Meteo](VERIFICHE/3-Meteo) | minimo/massimo, conteggi, form GET con input number |
-| 4 | [VERIFICHE/4-Biblioteca](VERIFICHE/4-Biblioteca) | conteggi per chiave, ksort, ricerca, scrittura file |
-| 5 | [VERIFICHE/5-QuizScelteMultiple](VERIFICHE/5-QuizScelteMultiple) | stile TestVeroFalso: domande da file, random, radio, hidden, correzione in centesimi |
-| 6 | [VERIFICHE/6-GareAtletica](VERIFICHE/6-GareAtletica) | vince il tempo minore (asort), podio, medagliere, array a due livelli, form con checkbox `naz[]` |
-| 7 | [VERIFICHE/7-Cinema](VERIFICHE/7-Cinema) | **due file** da collegare, percentuali, "tutto esaurito", form con radio |
-| 8 | [VERIFICHE/8-EserciziCalcolo](VERIFICHE/8-EserciziCalcolo) | stile TestTabelline: niente file dati, rand, checkbox operazioni, pagina che si richiama, salva su file |
-| 9 | [VERIFICHE/9-RegistroPresenze](VERIFICHE/9-RegistroPresenze) | ultimo campo testo (trim), ricerca senza maiuscole (strtoupper), tabella HTML a due dimensioni |
-| 10 | [VERIFICHE/10-Elezioni](VERIFICHE/10-Elezioni) | percentuali, vincitore per classe, **form che scrive nel file dei dati** |
 
-## Come provare una soluzione
-I file di codice sono salvati come `.php.txt` / `.html.txt` (come `compilatore.php.txt` del prof),
-cosi' si aprono con qualsiasi editor. Per eseguirli togli il `.txt` finale dal nome
-(es. `index.php.txt` -> `index.php`), poi:
-```
-cd VERIFICHE\1-VotiScuola\soluzione
-php -S localhost:8000
-```
-poi apri `http://localhost:8000` nel browser.
+VERIFICHE - ognuna ha una LOGICA DIVERSA
+----------------------------------------
+Ogni cartella ha:  traccia.txt  +  file di dati  +  soluzione/
+Le soluzioni sono .php.txt / .html.txt: per eseguirle togli il .txt finale.
 
-## Metodo consigliato
-1. Leggi la traccia.
-2. Apri `GUIDA/4-Schemi-per-la-verifica.txt` e cerca lo schema che ti serve.
-3. Scrivi la soluzione **un punto alla volta** e provala subito.
-4. Solo alla fine confronta con `soluzione/`.
+01-TorneoCalcetto     ORDINARE A MANO con lo spareggio (punti, poi differenza reti)
+02-VotiClasse         DUE PASSATE: prima calcolo la media della classe, poi confronto
+03-MeteoSettimane     RIGHE CONSECUTIVE: aumento tra un giorno e il successivo,
+                      serie piu' lunga di giorni di pioggia, intervallo tra due date
+04-Scontrino          DUE FILE COLLEGATI: prezzo da un file, quantita' dall'altro,
+                      prodotti mancanti, sconto sopra una soglia
+05-SalaCinema         GRIGLIA: ogni riga una fila, ogni carattere un posto (substr),
+                      posti vicini liberi, controllo di un posto
+06-Registrazione      CARATTERE PER CARATTERE: controllo password, email, nomi,
+                      generazione dello username (nessun file)
+07-ContoCorrente      CAMPI HIDDEN: il saldo e lo storico "viaggiano" tra un invio
+                      e l'altro, blocco dopo 5 operazioni (nessun file)
+08-AnalizzaNumeri     ALGORITMI CON I CICLI: divisori, primo, perfetto, cifre,
+                      palindromo, binario (nessun file)
+09-Timbrature         ORARI: "08:15" -> minuti -> calcoli -> di nuovo ore:minuti
+10-TestPenalita       CORREZIONE CON PUNTEGGIO DIVERSO: +1 / -0.5 / 0,
+                      voto in decimi con minimo, pagina che si richiama da sola
+
+
+COME USARLE
+-----------
+1. Leggi SOLO traccia.txt.
+2. In alto c'e' scritta la LOGICA PRINCIPALE: cerca lo schema nella guida 4.
+3. Scrivi un punto alla volta e provalo subito
+   (nella cartella soluzione:  php -S localhost:8000).
+4. Solo alla fine confronta con la soluzione.

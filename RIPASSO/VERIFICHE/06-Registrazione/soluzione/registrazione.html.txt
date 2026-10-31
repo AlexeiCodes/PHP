@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>Registrazione</title></head>
+<body>
+<h2>Registrazione</h2>
+<form action="controlla.php" method="post">
+    Nome: <input type="text" name="nome"><br>
+    Cognome: <input type="text" name="cognome"><br>
+    Eta': <input type="number" name="eta"><br>
+    Email: <input type="text" name="email"><br>
+    Password: <input type="password" name="pwd"><br>
+    Conferma password: <input type="password" name="pwd2"><br>
+    Ruolo:
+    <input type="radio" name="ruolo" value="studente"> Studente
+    <input type="radio" name="ruolo" value="docente"> Docente<br><br>
+    <input type="submit" value="Registrati">
+    <input type="reset" value="Cancella">
+</form>
+</body>
+</html>

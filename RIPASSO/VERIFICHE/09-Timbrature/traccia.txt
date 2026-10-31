@@ -1,0 +1,28 @@
+ESERCIZIO IN PHP / simulazione verifica - TIMBRATURE
+____________________________________________________
+LOGICA PRINCIPALE: LAVORARE CON GLI ORARI (convertire "08:15" in minuti e ritorno)
+
+Dato il file (badge.txt) con le timbrature dei dipendenti, una riga per
+dipendente e per giorno:
+
+dipendente,data,entrata,uscita
+
+Esempio:
+Rossi,03/11,08:02,14:10
+Bianchi,03/11,08:15,13:30
+...
+
+L'orario di ingresso e' alle 08:00, con una tolleranza fino alle 08:10:
+chi entra DOPO le 08:10 e' in ritardo.
+
+Produrre in output
+__________________
+1) Per ogni riga il tempo lavorato in formato ore:minuti (es. 6:08)
+2) Per ogni dipendente il totale delle ore lavorate (formato ore:minuti)
+   e il numero di ritardi
+3) Il dipendente/i dipendenti che hanno lavorato di piu' in totale
+4) L'elenco dei ritardi con dipendente, data e minuti di ritardo
+   rispetto alle 08:00
+5) Per ogni dipendente l'orario medio di entrata (formato hh:mm)
+6) Un form con un menu a tendina con le date: scelta una data mostrare
+   chi e' entrato per primo e chi e' uscito per ultimo

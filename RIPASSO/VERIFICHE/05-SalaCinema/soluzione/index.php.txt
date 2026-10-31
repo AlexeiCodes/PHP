@@ -1,0 +1,106 @@
+<?php
+// =========================================================
+//  SALA DEL CINEMA - soluzione con PHP base
+//  Novita': ogni riga e' una STRINGA, ogni carattere un posto (substr)
+// =========================================================
+
+$righe = file("../posti.txt");
+
+// ---------- LETTURA: costruisco la griglia $sala[fila][posto] ----------
+for ($f = 0; $f < count($righe); $f++)
+{
+    $riga = trim($righe[$f]);                        // tolgo il \n
+    for ($p = 0; $p < strlen($riga); $p++)
+        $sala[$f][$p] = substr($riga, $p, 1);        // un carattere = un posto
+    $postiPerFila[$f] = strlen($riga);
+}
+$numFile = count($righe);
+
+// ---------- 1) PIANTINA + 2) POSTI LIBERI PER FILA ----------
+echo "<h2>1) Piantina</h2><table border=1 cellpadding=4>";
+$totLiberi = 0;
+for ($f = 0; $f < $numFile; $f++)
+{
+    $liberi[$f] = 0;
+    echo "<tr><th>Fila " . ($f + 1) . "</th>";
+    for ($p = 0; $p < $postiPerFila[$f]; $p++)
+    {
+        if ($sala[$f][$p] == "-")
+        {
+            echo "<td bgcolor=lightgreen>" . ($p + 1) . "</td>";
+            $liberi[$f]++;
+        }
+        else
+            echo "<td bgcolor=salmon>" . ($p + 1) . "</td>";
+    }
+    echo "</tr>";
+    $totLiberi = $totLiberi + $liberi[$f];
+}
+echo "</table>";
+
+echo "<h2>2) Posti liberi</h2>";
+for ($f = 0; $f < $numFile; $f++) echo "Fila " . ($f + 1) . ": $liberi[$f]<br>";
+echo "<b>Totale: $totLiberi</b>";
+
+// ---------- 3) FILA PIU' LIBERA E FILE ESAURITE ----------
+$max = -1;
+for ($f = 0; $f < $numFile; $f++) if ($liberi[$f] > $max) $max = $liberi[$f];
+echo "<h2>3) File</h2>Piu' libera ($max posti): ";
+for ($f = 0; $f < $numFile; $f++) if ($liberi[$f] == $max) echo "fila " . ($f + 1) . " ";
+echo "<br>Tutto esaurito: ";
+for ($f = 0; $f < $numFile; $f++) if ($liberi[$f] == 0) echo "fila " . ($f + 1) . " ";
+
+// ---------- 4) PRIMA COPPIA DI POSTI VICINI LIBERI ----------
+echo "<h2>4) Prima coppia di posti vicini</h2>";
+$trovata = 0;
+for ($f = 0; $f < $numFile && $trovata == 0; $f++)
+    for ($p = 0; $p < $postiPerFila[$f] - 1 && $trovata == 0; $p++)   // -1: il posto $p+1 deve esistere
+        if ($sala[$f][$p] == "-" && $sala[$f][$p + 1] == "-")
+        {
+            echo "Fila " . ($f + 1) . ", posti " . ($p + 1) . " e " . ($p + 2);
+            $trovata = 1;                     // fa fermare tutti e due i for
+        }
+if ($trovata == 0) echo "Nessuna coppia libera";
+
+// ---------- 5) CONTROLLO DI UN POSTO ----------
+echo "<h2>5) Controlla un posto</h2><form action='' method='get'>";
+echo "Fila <input type='number' name='fila'> Posto <input type='number' name='posto'> ";
+echo "<input type='submit' value='Controlla'></form>";
+if (isset($_GET["fila"]) && isset($_GET["posto"]))
+{
+    $f = $_GET["fila"];   $p = $_GET["posto"];
+    settype($f, "integer");  settype($p, "integer");
+    $f = $f - 1;  $p = $p - 1;            // l'utente conta da 1, gli array da 0
+    if ($f < 0 || $f >= $numFile || $p < 0 || $p >= $postiPerFila[$f])
+        echo "POSTO INESISTENTE";
+    elseif ($sala[$f][$p] == "-")
+        echo "LIBERO";
+    else
+        echo "OCCUPATO";
+}
+
+// ---------- 6) FACOLTATIVO: N POSTI VICINI ----------
+echo "<h2>6) Cerca N posti vicini</h2><form action='' method='get'>";
+echo "N: <input type='number' name='n' min='1'> <input type='submit' value='Cerca'></form>";
+if (isset($_GET["n"]))
+{
+    $n = $_GET["n"];
+    settype($n, "integer");
+    $trovata = 0;
+    for ($f = 0; $f < $numFile && $trovata == 0; $f++)
+    {
+        $vicini = 0;                                   // posti liberi di fila consecutivi
+        for ($p = 0; $p < $postiPerFila[$f] && $trovata == 0; $p++)
+        {
+            if ($sala[$f][$p] == "-") $vicini++;
+            else $vicini = 0;
+            if ($vicini == $n)
+            {
+                echo "Fila " . ($f + 1) . ", dal posto " . ($p - $n + 2) . " al posto " . ($p + 1);
+                $trovata = 1;
+            }
+        }
+    }
+    if ($trovata == 0) echo "Non ci sono $n posti vicini liberi";
+}
+?>

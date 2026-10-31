@@ -1,0 +1,10 @@
+Leoni,Tigri,3,1
+Aquile,Squali,2,2
+Lupi,Leoni,0,2
+Tigri,Aquile,1,1
+Squali,Lupi,4,2
+Leoni,Aquile,1,1
+Tigri,Lupi,2,0
+Squali,Leoni,1,3
+Aquile,Lupi,3,0
+Tigri,Squali,2,1

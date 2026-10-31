@@ -1,0 +1,74 @@
+<?php
+// =========================================================
+//  TEST CON PENALITA' - soluzione con PHP base
+//  Una sola pagina: prima mostra il test, poi lo corregge
+// =========================================================
+
+$righe = file("../domande.txt");
+
+if (!isset($_GET["ris"]))
+{
+    // ================= PRIMA VOLTA: MOSTRO IL TEST =================
+    echo "<h2>Test vero o falso</h2>";
+    echo "<form action='' method='get'>";
+    echo "Nome: <input type='text' name='nome' required><br><br>";
+    for ($i = 0; $i < count($righe); $i++)
+    {
+        $parti = explode(";", $righe[$i]);
+        echo ($i + 1) . ") " . $parti[0] . "<br>";
+        // stesso name ris[$i] per i tre radio della stessa domanda
+        echo "<input type='radio' name='ris[$i]' value='V'> VERO ";
+        echo "<input type='radio' name='ris[$i]' value='F'> FALSO ";
+        echo "<input type='radio' name='ris[$i]' value='N' checked> NON RISPONDO<br><br>";
+    }
+    echo "<input type='submit' value='Consegna'></form>";
+}
+else
+{
+    // ================= CORREZIONE =================
+    $ris  = $_GET["ris"];
+    $nome = $_GET["nome"];
+    $giuste = 0;  $sbagliate = 0;  $nonDate = 0;
+
+    echo "<h2>Correzione</h2>";
+    for ($i = 0; $i < count($righe); $i++)
+    {
+        $parti = explode(";", $righe[$i]);
+        $giusta = trim($parti[1]);              // "F\n" -> "F"
+
+        echo ($i + 1) . ") " . $parti[0] . ": ";
+        if ($ris[$i] == "N")
+        {
+            echo "<font color=gray>NON DATA</font><br>";
+            $nonDate++;
+        }
+        elseif ($ris[$i] == $giusta)
+        {
+            echo "<font color=green>GIUSTA</font><br>";
+            $giuste++;
+        }
+        else
+        {
+            echo "<font color=red>SBAGLIATA</font> (era $giusta)<br>";
+            $sbagliate++;
+        }
+    }
+
+    // 4) punteggio: +1 giuste, -0.5 sbagliate, 0 non date
+    $punteggio = $giuste * 1 - $sbagliate * 0.5;
+    echo "<p>Giuste: $giuste - Sbagliate: $sbagliate - Non date: $nonDate</p>";
+    echo "<p>Punteggio: $punteggio su " . count($righe) . "</p>";
+
+    // 5) voto in decimi, minimo 1
+    $voto = $punteggio / count($righe) * 10;
+    if ($voto < 1) $voto = 1;
+    printf("<h3>%s: voto %.1f</h3>", $nome, $voto);
+
+    // 6) consiglio
+    if ($sbagliate == 0 && $nonDate == 0) echo "Perfetto!";
+    elseif ($sbagliate > $nonDate) echo "Rispondi solo se sei sicuro!";
+    else echo "Prova a rispondere di piu'!";
+
+    echo "<br><a href='test.php'>Rifai il test</a>";
+}
+?>

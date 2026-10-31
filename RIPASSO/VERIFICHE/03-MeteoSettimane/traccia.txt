@@ -1,0 +1,26 @@
+ESERCIZIO IN PHP / simulazione verifica - METEO DI DUE SETTIMANE
+________________________________________________________________
+LOGICA PRINCIPALE: CONFRONTARE OGNI RIGA CON QUELLA PRIMA (giorni consecutivi)
+
+Dato il file (meteo.txt) con le misure di una citta', un giorno per riga,
+GIA' IN ORDINE DI DATA:
+
+data,temperatura_minima,temperatura_massima,millimetri_pioggia
+
+Esempio:
+01/11,6,14,0
+02/11,7,15,0
+03/11,5,12,4
+...
+
+Produrre in output
+__________________
+1) La tabella dei giorni con l'escursione termica (massima - minima)
+2) Il maggiore AUMENTO della temperatura massima da un giorno al giorno
+   successivo, indicando i due giorni (es. "dal 05/11 al 06/11: +4")
+3) La serie piu' lunga di giorni CONSECUTIVI di pioggia e il giorno in cui
+   e' iniziata
+4) I giorni in cui la massima e' sopra la media delle massime del periodo
+5) Un form con due campi data (testo, es. 03/11 e 07/11): mostrare la
+   pioggia totale tra le due date comprese; se una data non esiste
+   scrivere "Data non trovata"

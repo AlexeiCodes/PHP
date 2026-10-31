@@ -1,0 +1,10 @@
+Pane,2
+Latte,3
+Pasta,5
+Formaggio,2
+Cioccolato,1
+Acqua,12
+Caffe,2
+Mele,3
+Gelato,2
+Biscotti,1

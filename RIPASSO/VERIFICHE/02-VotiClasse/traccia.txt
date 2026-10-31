@@ -1,0 +1,27 @@
+ESERCIZIO IN PHP / simulazione verifica - VOTI DELLA CLASSE
+___________________________________________________________
+LOGICA PRINCIPALE: CONFRONTARE CON UN VALORE CALCOLATO PRIMA (due passate)
+
+Dato il file (voti.txt), una riga per voto:
+
+studente,materia,voto
+
+Esempio:
+Rossi,Matematica,7
+Bianchi,Matematica,4
+...
+
+Produrre in output
+__________________
+1) La media di ogni studente (2 decimali)
+2) La media generale della classe (di tutti i voti)
+3) Gli studenti con la media SOPRA la media della classe
+   (prima bisogna calcolare la media della classe, poi confrontare)
+4) Per ogni materia quanti studenti hanno un'insufficienza (voto < 6)
+   e la materia con piu' insufficienze
+5) L'elenco degli studenti in ordine alfabetico (ordinamento A MANO)
+   con accanto "PROMOSSO" se non ha insufficienze, altrimenti
+   "DEBITI: n" con il numero di insufficienze
+6) Un form con una casella di testo per il cognome: mostrare i voti dello
+   studente senza badare a maiuscole/minuscole ("rossi" = "Rossi");
+   se non esiste scrivere "Studente non trovato"
