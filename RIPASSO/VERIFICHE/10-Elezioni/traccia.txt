@@ -1,0 +1,27 @@
+ESERCIZIO IN PHP / simulazione verifica n.10 - ELEZIONI DEI RAPPRESENTANTI
+__________________________________________________________________________
+Dato il file (schede.txt) con le schede votate per l'elezione del
+rappresentante d'istituto, una riga per scheda:
+
+classe,candidato
+
+Esempio:
+5B,Bianchi
+4A,Neri
+5A,Rossi
+...
+
+Produrre in output
+__________________
+1) I voti di ogni candidato e la percentuale sul totale delle schede
+   (1 decimale), dal piu' votato al meno votato
+2) Per ogni classe il candidato/i candidati piu' votati
+3) I due eletti (i primi due della classifica del punto 1)
+4) Un form per VOTARE: un menu a tendina con le classi e un pulsante radio
+   per ogni candidato (classi e candidati presi dal file). Quando si invia
+   il voto, aggiungere una riga in fondo a schede.txt e scrivere
+   "Voto registrato" (i risultati devono aggiornarsi)
+5) Il file risultati.html con i candidati in ordine alfabetico e i loro voti
+
+Facoltativo:
+6) La classe che ha votato di piu' (piu' schede)

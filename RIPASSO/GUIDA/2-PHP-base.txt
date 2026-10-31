@@ -1,0 +1,119 @@
+# 2 – PHP base
+
+## Struttura
+```php
+<?php
+    // commento su una riga
+    /* commento
+       su più righe */
+    echo "Ciao<br>";      // ogni istruzione finisce con ;
+?>
+```
+PHP gira **sul server**: il browser riceve solo l'HTML che stampi con `echo`/`printf`.
+Per andare a capo nella pagina: `<br>` (oppure `\n` dentro `<pre> ... </pre>`).
+
+## Variabili
+```php
+$nome  = "Luca";    // string
+$eta   = 17;        // integer
+$media = 7.5;       // double
+$ok    = true;      // boolean
+```
+- iniziano con `$`, non si dichiarano, il tipo lo decide PHP.
+- `gettype($x)` → nome del tipo. `settype($x, "integer")` → lo cambia.
+
+## Stringhe
+```php
+echo "Ciao " . $nome;     // il PUNTO unisce le stringhe
+echo "Ciao $nome";        // con i doppi apici la variabile viene sostituita
+echo 'Ciao $nome';        // con gli apici singoli NO
+$frase .= " altro";       // aggiunge in fondo
+```
+
+## printf (come in C)
+```php
+printf("%s ha preso %d punti<br>", $nome, $punti);   // %s stringa, %d intero
+printf("Media: %.2f", $media);                        // %.2f = 2 decimali
+printf("%3d", 5);                                     // numero su 3 caratteri
+```
+
+## Operatori
+| | |
+|---|---|
+| `+ - * / %` | `/` dà il decimale, `%` è il resto |
+| `== != < > <= >=` | confronto |
+| `===` | uguale **e** stesso tipo |
+| `&& \|\| !` | e, o, non |
+| `++ --  += -= *= .=` | incrementi e assegnazioni |
+
+## if / elseif / else
+```php
+if ($gc > $go)
+    echo "vince la squadra di casa";
+elseif ($gc < $go)
+    echo "vince l'ospite";
+else
+    echo "pareggio";
+```
+Più istruzioni → tra `{ }`.
+
+## Cicli
+```php
+for ($i = 0; $i < 10; $i++) { ... }          // numero di giri noto
+while ($x < 100) { ... }                     // finché…
+do { ... } while ($x < 100);                 // almeno una volta
+foreach ($array as $valore) { ... }          // ogni elemento
+foreach ($array as $chiave => $valore) { ... } // con la chiave
+```
+
+## Array "normali" (chiave = numero)
+```php
+$v = array(4, 5, 6);   // oppure [4, 5, 6]
+$v[] = 7;              // aggiunge in fondo
+echo $v[0];            // 4
+echo count($v);        // 4 elementi
+```
+
+## Array associativi (chiave = parola) ⭐
+Pensalo come un **armadietto**: ogni casella ha un'etichetta (la *chiave*) e un contenuto (il *valore*).
+```php
+$punti["Inter"] = 3;
+$punti["Milan"] = 0;
+echo $punti["Inter"];          // 3
+
+foreach ($punti as $squadra => $p)
+    echo "$squadra: $p<br>";
+```
+Usali quando devi tenere **un dato per ogni nome** (punti per squadra, voti per
+studente, incasso per prodotto…).
+
+⚠️ Prima di fare `$punti["Inter"] += 3` la casella deve esistere:
+```php
+if (!isset($punti[$squadra])) $punti[$squadra] = 0;
+```
+
+## Array a due livelli (matrice)
+```php
+$partite[] = array($casa, $ospite, $gc, $go);   // una riga = una partita
+echo $partite[0][1];                            // ospite della prima partita
+```
+
+## Funzioni scritte da te
+```php
+function somma($a, $b) {
+    return $a + $b;
+}
+function raddoppia(&$x) {   // & = modifica la variabile originale
+    $x = $x * 2;
+}
+```
+Le variabili di fuori non si vedono dentro la funzione (serve `global $var;`).
+
+## Pagina che si richiama da sola
+```php
+if (!isset($_GET["risposte"])) {
+    // PRIMA VOLTA: mostro il form (action="" = questa pagina)
+} else {
+    // FORM INVIATO: elaboro i dati
+}
+```

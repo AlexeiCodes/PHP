@@ -1,0 +1,69 @@
+# 3 – Funzioni PHP viste in classe
+
+Solo funzioni usate negli esercizi del prof o nelle sue lezioni.
+
+## Leggere e scrivere file
+| Funzione | Cosa fa | Esempio |
+|---|---|---|
+| `file("nome.txt")` | legge il file: **ogni riga = un elemento** dell'array (con `\n` finale) | `$righe = file("squadre.txt");` |
+| `file_put_contents("nome", $testo)` | crea/sovrascrive un file con il testo | `file_put_contents("squadre.html", $html);` |
+
+## Stringhe
+| Funzione | Cosa fa | Esempio → risultato |
+|---|---|---|
+| `explode(sep, s)` | spezza la stringa in un array | `explode(",", "Inter,Milan,2,0")` → `["Inter","Milan","2","0"]` |
+| `implode(sep, arr)` | unisce l'array in una stringa | `implode(", ", ["A","B"])` → `"A, B"` |
+| `trim(s)` | toglie spazi e `\n` all'inizio e alla fine | `trim("Roma\n")` → `"Roma"` |
+| `strlen(s)` | lunghezza | `strlen("ciao")` → `4` |
+| `substr(s, inizio, lung)` | pezzo di stringa | `substr("Buongiorno", 0, 4)` → `"Buon"` |
+| `strtoupper` / `strtolower` | maiuscolo / minuscolo | `strtoupper("ciao")` → `"CIAO"` |
+| `ucfirst(s)` | prima lettera maiuscola | `ucfirst("roma")` → `"Roma"` |
+| `str_replace(a, b, s)` | sostituisce | `str_replace("a","o","casa")` → `"coso"` |
+| `strpos(s, cerca)` | posizione (o `false`) | `strpos("ciao","a")` → `2` |
+| `htmlspecialchars(s)` | rende sicuro un testo da stampare in HTML (apostrofi, `<`…) | |
+
+## Numeri
+| Funzione | Cosa fa | Esempio |
+|---|---|---|
+| `settype($x, "integer")` | trasforma `$x` in intero (toglie anche il `\n`) | `"2\n"` → `2` |
+| `settype($x, "double")` | trasforma in decimale | |
+| `round(x, n)` | arrotonda a n decimali | `round(7.456, 1)` → `7.5` |
+| `rand(min, max)` | numero casuale | `rand(1, 10)` |
+| `pow(b, e)` | potenza | `pow(2, 3)` → `8` |
+| `printf` / `sprintf` | stampa formattata / stringa formattata | `printf("%.2f", 3.14159)` |
+
+## Array
+| Funzione | Cosa fa |
+|---|---|
+| `count($a)` | numero di elementi |
+| `print_r($a)` | stampa tutto l'array (debug, dentro `<pre>`) |
+| `isset($a[$k])` | la casella `$k` esiste? |
+| `array_key_exists($k, $a)` | come sopra |
+| `in_array($v, $a)` | il **valore** `$v` è nell'array? |
+| `array_rand($a)` | una **chiave** a caso |
+| `unset($a[$k])` | elimina la casella `$k` |
+| `implode` / `explode` | vedi sopra |
+
+### Ordinamenti ⭐
+| Funzione | Ordina per | Chiavi | Uso tipico |
+|---|---|---|---|
+| `sort($a)` | valore ↑ | **perse** (0,1,2…) | lista di nomi in ordine alfabetico |
+| `rsort($a)` | valore ↓ | perse | |
+| `asort($a)` | valore ↑ | **tenute** | |
+| `arsort($a)` | valore ↓ | tenute | **CLASSIFICA** (`$punti`) |
+| `ksort($a)` | **chiave** ↑ | tenute | squadre/nomi in ordine alfabetico |
+
+## Variabili del server
+| | |
+|---|---|
+| `$_GET`, `$_POST`, `$_REQUEST` | dati dei form |
+| `$_SERVER["REMOTE_ADDR"]` | IP del visitatore |
+| `$_SERVER["HTTP_USER_AGENT"]` | browser |
+| `$_SERVER["REQUEST_METHOD"]` | GET o POST |
+| `phpversion()`, `PHP_OS` | versione PHP, sistema operativo |
+
+## Tipi
+| | |
+|---|---|
+| `gettype($x)` | `"integer"`, `"double"`, `"string"`, `"boolean"`, `"array"` |
+| `isset($x)` | la variabile esiste? |

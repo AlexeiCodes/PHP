@@ -1,0 +1,27 @@
+ESERCIZIO IN PHP / simulazione verifica n.3 - METEO
+___________________________________________________
+Dato il file (meteo.txt) con le misurazioni di una settimana, una riga per
+citta' e giorno:
+
+citta,giorno,temperatura_minima,temperatura_massima,millimetri_di_pioggia
+
+Esempio:
+Parma,Lunedi,8,16,0
+Parma,Martedi,9,18,2
+Milano,Lunedi,9,17,0
+...
+
+Produrre in output
+__________________
+1) Per ogni citta' la media delle temperature massime (1 decimale)
+2) La temperatura piu' alta e piu' bassa di tutta la settimana, indicando
+   citta' e giorno (attenzione ai pari merito)
+3) La citta'/le citta' con piu' giorni di pioggia (pioggia > 0)
+4) Un form con un campo numerico "soglia": mostrare tutte le righe
+   (citta' e giorno) in cui la temperatura massima e' maggiore o uguale
+   alla soglia, e quante sono
+5) Il file citta.html con le citta' in ordine alfabetico e, per ognuna,
+   i millimetri di pioggia totali della settimana
+
+Facoltativo:
+6) Il giorno con l'escursione termica (massima - minima) piu' grande

@@ -1,0 +1,45 @@
+<?php
+// =========================================================
+//  VERIFICA 5 - QUIZ   pagina 2: genera le domande
+// =========================================================
+$nome = $_POST["nome"];
+$numDomande = $_POST["numdomande"];
+settype($numDomande, "integer");
+
+$righe = file("../domande.txt");
+
+// 2) controllo che ci siano abbastanza domande
+if ($numDomande > count($righe))
+{
+    echo "Domande insufficienti (nel file ce ne sono ".count($righe).")";
+    return;     // fermo il programma (come fa il prof in TestDomande.php)
+}
+
+// creo un array con i NUMERI di riga: 0, 1, 2, ... (ognuno = una domanda)
+for ($i = 0; $i < count($righe); $i++)
+    $disponibili[$i] = $i;
+
+echo "<h2>Quiz di ".htmlspecialchars($nome)."</h2>";
+echo "<form action='correggi.php' method='post'>";
+echo "<input type='hidden' name='nome' value='".htmlspecialchars($nome)."'>";
+
+// 3) domande casuali senza ripetizioni: array_rand + unset (come Soluzione1 del prof)
+for ($i = 0; $i < $numDomande; $i++)
+{
+    $k = array_rand($disponibili);     // chiave casuale
+    $riga = $disponibili[$k];          // numero della riga scelta
+    unset($disponibili[$k]);           // la tolgo: non uscira' piu'
+
+    $parti = explode(";", $righe[$riga]);
+    echo "<p><b>".($i + 1).") ".htmlspecialchars($parti[0])."</b><br>";
+    echo "<input type='radio' name='ris[$i]' value='A' required> ".htmlspecialchars($parti[1])."<br>";
+    echo "<input type='radio' name='ris[$i]' value='B' required> ".htmlspecialchars($parti[2])."<br>";
+    echo "<input type='radio' name='ris[$i]' value='C' required> ".htmlspecialchars($parti[3])."</p>";
+
+    // nell'hidden metto SOLO il numero della riga, NON la soluzione:
+    // la soluzione la rileggo dal file in correggi.php
+    echo "<input type='hidden' name='riga[$i]' value='$riga'>";
+}
+echo "<input type='submit' value='Consegna'>";
+echo "</form>";
+?>

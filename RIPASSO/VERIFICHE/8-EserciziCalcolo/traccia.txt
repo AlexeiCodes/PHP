@@ -1,0 +1,24 @@
+ESERCIZIO IN PHP / simulazione verifica n.8 - GENERATORE DI ESERCIZI
+____________________________________________________________________
+(sullo stile di TestTabelline: NON ci sono file di dati)
+
+Realizzare un programma per allenarsi con il calcolo a mente.
+
+1) Una pagina HTML (index.html) con un form che chiede:
+   - quanti esercizi si vogliono (campo numerico, minimo 1)
+   - quali operazioni allenare, con delle checkbox:
+     somma, sottrazione, moltiplicazione
+   - il numero massimo da usare negli esercizi (campo numerico, es. 10)
+2) Il programma PHP genera gli esercizi richiesti scegliendo a caso
+   un'operazione tra quelle spuntate e due numeri casuali tra 1 e il massimo.
+   Nelle sottrazioni il risultato non deve essere negativo.
+   Se non e' stata scelta nessuna operazione scrivere un messaggio d'errore.
+3) L'utente scrive le risposte e preme "Correggi": la correzione deve essere
+   fatta DALLO STESSO file PHP (la pagina richiama se stessa)
+4) Per ogni esercizio mostrare il risultato giusto; le risposte sbagliate
+   vanno scritte in rosso
+5) Dare il punteggio in centesimi e salvare nel file ultimo.txt
+   una riga con: numero esercizi, risposte giuste, punteggio
+
+Facoltativo:
+6) Mostrare quanti errori sono stati fatti per ogni tipo di operazione

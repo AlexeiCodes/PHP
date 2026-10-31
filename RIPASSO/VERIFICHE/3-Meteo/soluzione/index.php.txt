@@ -1,0 +1,110 @@
+<?php
+// =========================================================
+//  VERIFICA 3 - METEO     (soluzione con PHP base)
+// =========================================================
+
+$righe = file("../meteo.txt");
+
+$tempMax = -100;     // valore piu' alto trovato finora (parto bassissimo)
+$tempMin = 100;      // valore piu' basso trovato finora (parto altissimo)
+$escMax  = -1;
+
+for ($i = 0; $i < count($righe); $i++)
+{
+    $parti = explode(",", $righe[$i]);
+    $citta  = $parti[0];
+    $giorno = $parti[1];
+    $min    = $parti[2];
+    $max    = $parti[3];
+    $pioggia = $parti[4];
+    settype($min, "integer");
+    settype($max, "integer");
+    settype($pioggia, "integer");
+
+    // salvo la riga (punti 2, 4, 6)
+    $misure[] = array($citta, $giorno, $min, $max, $pioggia);
+
+    // 1) media delle massime: somma + conteggio (Schema D)
+    if (!isset($sommaMax[$citta]))
+    {
+        $sommaMax[$citta] = 0;
+        $numGiorni[$citta] = 0;
+        $giorniPioggia[$citta] = 0;
+        $mmTotali[$citta] = 0;
+    }
+    $sommaMax[$citta]  = $sommaMax[$citta] + $max;
+    $numGiorni[$citta] = $numGiorni[$citta] + 1;
+
+    // 3) giorni di pioggia (contare solo se piove)
+    if ($pioggia > 0) $giorniPioggia[$citta] = $giorniPioggia[$citta] + 1;
+
+    // 5) millimetri totali (sommare)
+    $mmTotali[$citta] = $mmTotali[$citta] + $pioggia;
+
+    // 2) trovo i valori estremi mentre leggo
+    if ($max > $tempMax) $tempMax = $max;
+    if ($min < $tempMin) $tempMin = $min;
+
+    // 6) escursione massima
+    if ($max - $min > $escMax) $escMax = $max - $min;
+}
+
+// ---------- 1) MEDIA DELLE MASSIME ----------
+echo "<h2>1) Media delle temperature massime</h2>";
+foreach ($sommaMax as $citta => $s)
+    printf("%s: %.1f &deg;C<br>", $citta, $s / $numGiorni[$citta]);
+
+// ---------- 2) PIU' ALTA E PIU' BASSA (con pari merito) ----------
+echo "<h2>2) Temperature estreme</h2>";
+echo "Piu' alta ($tempMax &deg;C): ";
+for ($i = 0; $i < count($misure); $i++)
+    if ($misure[$i][3] == $tempMax) echo $misure[$i][0]." ".$misure[$i][1]."; ";
+echo "<br>Piu' bassa ($tempMin &deg;C): ";
+for ($i = 0; $i < count($misure); $i++)
+    if ($misure[$i][2] == $tempMin) echo $misure[$i][0]." ".$misure[$i][1]."; ";
+
+// ---------- 3) PIU' GIORNI DI PIOGGIA (Schema E) ----------
+$maxP = -1;
+foreach ($giorniPioggia as $citta => $n)
+    if ($n > $maxP) $maxP = $n;
+echo "<h2>3) Citta' con piu' giorni di pioggia</h2>";
+foreach ($giorniPioggia as $citta => $n)
+    if ($n == $maxP) echo "$citta ($n giorni)<br>";
+
+// ---------- 4) FORM CON SOGLIA ----------
+echo "<h2>4) Giorni sopra una soglia</h2>";
+echo "<form action='' method='get'>";
+echo "Soglia: <input type='number' name='soglia' value='20'> <input type='submit' value='Cerca'>";
+echo "</form>";
+
+if (isset($_GET["soglia"]))
+{
+    $soglia = $_GET["soglia"];
+    settype($soglia, "integer");       // dal form arriva una stringa
+    $conta = 0;
+    for ($i = 0; $i < count($misure); $i++)
+    {
+        if ($misure[$i][3] >= $soglia)
+        {
+            echo $misure[$i][0]." - ".$misure[$i][1]." (".$misure[$i][3]." &deg;C)<br>";
+            $conta++;
+        }
+    }
+    echo "<b>Totale: $conta</b>";
+}
+
+// ---------- 5) FILE citta.html (Schema G + J) ----------
+ksort($mmTotali);
+$html = "<html><body><h1>Pioggia della settimana</h1><table border=1>\n";
+foreach ($mmTotali as $citta => $mm)
+    $html = $html . "<tr><td>$citta</td><td>$mm mm</td></tr>\n";
+$html = $html . "</table></body></html>";
+file_put_contents("citta.html", $html);
+echo "<h2>5) File creato</h2><a href='citta.html'>Apri citta.html</a>";
+
+// ---------- 6) FACOLTATIVO: ESCURSIONE TERMICA ----------
+echo "<h2>6) Escursione termica piu' grande ($escMax &deg;C)</h2>";
+for ($i = 0; $i < count($misure); $i++)
+    if ($misure[$i][3] - $misure[$i][2] == $escMax)
+        echo $misure[$i][0]." ".$misure[$i][1]."<br>";
+?>

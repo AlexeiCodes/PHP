@@ -1,0 +1,110 @@
+<?php
+// =========================================================
+//  VERIFICA 7 - CINEMA     (soluzione con PHP base)
+//  Novita': DUE file da leggere e collegare tra loro
+// =========================================================
+
+// ---------- PRIMO FILE: posti di ogni sala ----------
+$righeSale = file("../sale.txt");
+for ($i = 0; $i < count($righeSale); $i++)
+{
+    $parti = explode(",", $righeSale[$i]);
+    $posti = $parti[1];
+    settype($posti, "integer");
+    $postiSala[$parti[0]] = $posti;          // "Sala1" => 150
+}
+
+// ---------- SECONDO FILE: prenotazioni ----------
+$righe = file("../prenotazioni.txt");
+for ($i = 0; $i < count($righe); $i++)
+{
+    $parti = explode(",", $righe[$i]);
+    $giorno    = $parti[0];
+    $sala      = $parti[1];
+    $film      = $parti[2];
+    $biglietti = $parti[3];
+    $prezzo    = $parti[4];
+    settype($biglietti, "integer");
+    settype($prezzo, "double");
+
+    $spettacoli[] = array($giorno, $sala, $film, $biglietti);
+
+    // 1) incasso per film
+    if (!isset($incasso[$film])) { $incasso[$film] = 0; $spettatori[$film] = 0; }
+    $incasso[$film]    = $incasso[$film] + $biglietti * $prezzo;
+    $spettatori[$film] = $spettatori[$film] + $biglietti;
+
+    // 3) biglietti per giorno
+    if (!isset($perGiorno[$giorno])) $perGiorno[$giorno] = 0;
+    $perGiorno[$giorno] = $perGiorno[$giorno] + $biglietti;
+
+    // 6) somma delle percentuali per sala (per la media)
+    $perc = $biglietti / $postiSala[$sala] * 100;     // uso il PRIMO file!
+    if (!isset($sommaPerc[$sala])) { $sommaPerc[$sala] = 0; $numSp[$sala] = 0; }
+    $sommaPerc[$sala] = $sommaPerc[$sala] + $perc;
+    $numSp[$sala]     = $numSp[$sala] + 1;
+}
+
+// ---------- 1) INCASSO PER FILM ----------
+arsort($incasso);
+echo "<h2>1) Incasso per film</h2><table border=1>";
+foreach ($incasso as $film => $euro)
+    printf("<tr><td>%s</td><td>%.2f &euro;</td></tr>", $film, $euro);
+echo "</table>";
+
+// ---------- 2) RIEMPIMENTO DI OGNI SPETTACOLO ----------
+echo "<h2>2) Riempimento delle sale</h2>";
+for ($i = 0; $i < count($spettacoli); $i++)
+{
+    $sala = $spettacoli[$i][1];
+    $perc = $spettacoli[$i][3] / $postiSala[$sala] * 100;
+    printf("%s %s %s: %.0f%%", $spettacoli[$i][0], $sala, $spettacoli[$i][2], $perc);
+    // %% in printf stampa il simbolo %
+    if ($spettacoli[$i][3] == $postiSala[$sala]) echo " <b>TUTTO ESAURITO</b>";
+    echo "<br>";
+}
+
+// ---------- 3) GIORNO CON PIU' BIGLIETTI (Schema E) ----------
+$max = -1;
+foreach ($perGiorno as $giorno => $n)
+    if ($n > $max) $max = $n;
+echo "<h2>3) Giorno con piu' biglietti venduti</h2>";
+foreach ($perGiorno as $giorno => $n)
+    if ($n == $max) echo "$giorno ($n biglietti)<br>";
+
+// ---------- 4) FORM CON RADIO ----------
+echo "<h2>4) Programmazione del giorno</h2><form action='' method='get'>";
+foreach ($perGiorno as $giorno => $n)
+    echo "<input type='radio' name='giorno' value='$giorno' required> $giorno ";
+echo "<input type='submit' value='Mostra'></form>";
+
+if (isset($_GET["giorno"]))
+{
+    $scelto = $_GET["giorno"];
+    echo "<table border=1><tr><th>Sala</th><th>Film</th><th>Biglietti</th></tr>";
+    for ($i = 0; $i < count($spettacoli); $i++)
+        if ($spettacoli[$i][0] == $scelto)
+            echo "<tr><td>".$spettacoli[$i][1]."</td><td>".$spettacoli[$i][2]."</td><td>".$spettacoli[$i][3]."</td></tr>";
+    echo "</table>";
+}
+
+// ---------- 5) FILE programmazione.html ----------
+ksort($spettatori);
+$html = "<html><body><h1>Film in programmazione</h1><ul>\n";
+foreach ($spettatori as $film => $n)
+    $html = $html . "<li>$film: $n spettatori</li>\n";
+$html = $html . "</ul></body></html>";
+file_put_contents("programmazione.html", $html);
+echo "<h2>5) File creato</h2><a href='programmazione.html'>Apri programmazione.html</a>";
+
+// ---------- 6) FACOLTATIVO ----------
+$max = -1;
+foreach ($sommaPerc as $sala => $s)
+{
+    $media[$sala] = $s / $numSp[$sala];
+    if ($media[$sala] > $max) $max = $media[$sala];
+}
+echo "<h2>6) Sala con il riempimento medio piu' alto</h2>";
+foreach ($media as $sala => $m)
+    if ($m == $max) printf("%s (%.1f%%)<br>", $sala, $m);
+?>

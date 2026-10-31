@@ -1,0 +1,46 @@
+# RIPASSO PHP – 5B
+
+Cartella pensata per **ripassare e prepararsi alla verifica**.
+
+## 📘 GUIDA (da consultare)
+| File | Cosa trovi |
+|---|---|
+| [GUIDA/1-Form-HTML.txt](GUIDA/1-Form-HTML.txt) | Tutti i campi dei moduli HTML e come arrivano a PHP |
+| [GUIDA/2-PHP-base.txt](GUIDA/2-PHP-base.txt) | Variabili, if, cicli, array, array associativi |
+| [GUIDA/3-Funzioni-PHP.txt](GUIDA/3-Funzioni-PHP.txt) | Le funzioni viste in classe, in ordine alfabetico, con esempio |
+| [GUIDA/4-Schemi-per-la-verifica.txt](GUIDA/4-Schemi-per-la-verifica.txt) | **I "pezzi" che si ripetono in ogni esercizio**: leggere un file, contare, sommare, trovare il massimo, classifica, form… |
+
+## 📝 VERIFICHE (stile "SquadreCalcio")
+Ogni cartella ha:
+- `traccia.txt` → il testo della verifica (leggi solo questo e prova da solo!)
+- un file di dati `.txt`
+- `soluzione/` → soluzione commentata riga per riga (file `.php.txt`)
+
+| # | Verifica | Argomenti |
+|---|---|---|
+| 1 | [VERIFICHE/1-VotiScuola](VERIFICHE/1-VotiScuola) | file, array associativi, medie, massimo, form con select |
+| 2 | [VERIFICHE/2-Negozio](VERIFICHE/2-Negozio) | somme, incassi, classifica (arsort), file HTML in output |
+| 3 | [VERIFICHE/3-Meteo](VERIFICHE/3-Meteo) | minimo/massimo, conteggi, form GET con input number |
+| 4 | [VERIFICHE/4-Biblioteca](VERIFICHE/4-Biblioteca) | conteggi per chiave, ksort, ricerca, scrittura file |
+| 5 | [VERIFICHE/5-QuizScelteMultiple](VERIFICHE/5-QuizScelteMultiple) | stile TestVeroFalso: domande da file, random, radio, hidden, correzione in centesimi |
+| 6 | [VERIFICHE/6-GareAtletica](VERIFICHE/6-GareAtletica) | vince il tempo minore (asort), podio, medagliere, array a due livelli, form con checkbox `naz[]` |
+| 7 | [VERIFICHE/7-Cinema](VERIFICHE/7-Cinema) | **due file** da collegare, percentuali, "tutto esaurito", form con radio |
+| 8 | [VERIFICHE/8-EserciziCalcolo](VERIFICHE/8-EserciziCalcolo) | stile TestTabelline: niente file dati, rand, checkbox operazioni, pagina che si richiama, salva su file |
+| 9 | [VERIFICHE/9-RegistroPresenze](VERIFICHE/9-RegistroPresenze) | ultimo campo testo (trim), ricerca senza maiuscole (strtoupper), tabella HTML a due dimensioni |
+| 10 | [VERIFICHE/10-Elezioni](VERIFICHE/10-Elezioni) | percentuali, vincitore per classe, **form che scrive nel file dei dati** |
+
+## Come provare una soluzione
+I file di codice sono salvati come `.php.txt` / `.html.txt` (come `compilatore.php.txt` del prof),
+cosi' si aprono con qualsiasi editor. Per eseguirli togli il `.txt` finale dal nome
+(es. `index.php.txt` -> `index.php`), poi:
+```
+cd VERIFICHE\1-VotiScuola\soluzione
+php -S localhost:8000
+```
+poi apri `http://localhost:8000` nel browser.
+
+## Metodo consigliato
+1. Leggi la traccia.
+2. Apri `GUIDA/4-Schemi-per-la-verifica.txt` e cerca lo schema che ti serve.
+3. Scrivi la soluzione **un punto alla volta** e provala subito.
+4. Solo alla fine confronta con `soluzione/`.

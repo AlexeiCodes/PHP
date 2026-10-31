@@ -1,0 +1,100 @@
+<?php
+// =========================================================
+//  VERIFICA 6 - GARE DI ATLETICA     (soluzione con PHP base)
+// =========================================================
+
+$righe = file("../gare.txt");
+
+for ($i = 0; $i < count($righe); $i++)
+{
+    $parti = explode(",", $righe[$i]);
+    $atleta  = $parti[0];
+    $nazione = $parti[1];
+    $gara    = $parti[2];
+    $tempo   = $parti[3];
+    settype($tempo, "double");         // tempo con i decimali
+
+    $risultati[] = array($atleta, $nazione, $gara, $tempo);
+
+    // ARRAY A DUE LIVELLI:  $tempi["100m"]["Rossi"] = 10.21
+    // per ogni gara ho un array associativo atleta => tempo
+    $tempi[$gara][$atleta] = $tempo;
+
+    // mi ricordo la nazione di ogni atleta
+    $nazioneDi[$atleta] = $nazione;
+
+    // 5) atleti per nazione (contare)
+    if (!isset($iscritti[$nazione])) $iscritti[$nazione] = 0;
+    $iscritti[$nazione] = $iscritti[$nazione] + 1;
+}
+
+// ---------- 1) e 2) VINCITORE E PODIO DI OGNI GARA ----------
+echo "<h2>1) e 2) Vincitori e podi</h2>";
+foreach ($tempi as $gara => $atleti)
+{
+    asort($atleti);          // tempi dal PIU' PICCOLO al piu' grande (tiene i nomi)
+    echo "<h3>$gara</h3>";
+    $pos = 1;
+    foreach ($atleti as $atleta => $t)
+    {
+        if ($pos == 1)
+            printf("<b>Vincitore: %s (%s) %.2f s</b><br>", $atleta, $nazioneDi[$atleta], $t);
+        if ($pos <= 3)
+        {
+            printf("%d&deg; %s (%s) %.2f s<br>", $pos, $atleta, $nazioneDi[$atleta], $t);
+
+            // 3) medagliere: +1 alla nazione dell'atleta sul podio
+            $naz = $nazioneDi[$atleta];
+            if (!isset($medaglie[$naz])) $medaglie[$naz] = 0;
+            $medaglie[$naz] = $medaglie[$naz] + 1;
+        }
+        $pos++;
+    }
+}
+
+// ---------- 3) MEDAGLIERE (Schema F) ----------
+arsort($medaglie);
+echo "<h2>3) Medagliere</h2><table border=1><tr><th>Nazione</th><th>Medaglie</th></tr>";
+foreach ($medaglie as $naz => $n)
+    echo "<tr><td>$naz</td><td>$n</td></tr>";
+echo "</table>";
+
+// ---------- 4) FORM CON CHECKBOX (name con le quadre!) ----------
+echo "<h2>4) Atleti per nazione</h2>";
+echo "<form action='' method='get'>";
+foreach ($iscritti as $naz => $n)
+    echo "<input type='checkbox' name='naz[]' value='$naz'> $naz<br>";
+// campo nascosto: mi serve per sapere che il form e' stato inviato anche
+// quando non e' spuntata nessuna casella (in quel caso "naz" non arriva!)
+echo "<input type='hidden' name='inviato' value='si'>";
+echo "<input type='submit' value='Mostra'></form>";
+
+if (isset($_GET["naz"]))                 // almeno una casella spuntata
+{
+    $scelte = $_GET["naz"];              // array con le nazioni spuntate
+    for ($i = 0; $i < count($risultati); $i++)
+        if (in_array($risultati[$i][1], $scelte))
+            printf("%s (%s) - %s - %.2f s<br>", $risultati[$i][0], $risultati[$i][1], $risultati[$i][2], $risultati[$i][3]);
+}
+elseif (isset($_GET["inviato"]))       // form inviato ma nessuna casella spuntata
+    echo "Scegli almeno una nazione";
+
+// ---------- 5) FILE nazioni.html ----------
+ksort($iscritti);
+$html = "<html><body><h1>Nazioni</h1><ul>\n";
+foreach ($iscritti as $naz => $n)
+    $html = $html . "<li>$naz: $n atleti</li>\n";
+$html = $html . "</ul></body></html>";
+file_put_contents("nazioni.html", $html);
+echo "<h2>5) File creato</h2><a href='nazioni.html'>Apri nazioni.html</a>";
+
+// ---------- 6) FACOLTATIVO: TEMPO MEDIO PER GARA ----------
+echo "<h2>6) Tempo medio per gara</h2>";
+foreach ($tempi as $gara => $atleti)
+{
+    $somma = 0;
+    foreach ($atleti as $atleta => $t)
+        $somma = $somma + $t;
+    printf("%s: %.2f s<br>", $gara, $somma / count($atleti));
+}
+?>

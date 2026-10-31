@@ -1,0 +1,26 @@
+ESERCIZIO IN PHP / simulazione verifica n.1 - VOTI
+__________________________________________________
+Dato il file (voti.txt) con i voti della classe, una riga per voto:
+
+studente,materia,voto
+
+Esempio:
+Rossi,Matematica,7
+Rossi,Italiano,6
+Bianchi,Matematica,4
+...
+
+(uno studente puo' avere piu' voti nella stessa materia)
+
+Produrre in output
+__________________
+1) La media dei voti di ogni studente (con 2 decimali)
+2) Lo studente/gli studenti con la media piu' alta
+3) Per ogni materia il numero di insufficienze (voto < 6)
+4) Un form con un menu a tendina con tutti gli studenti: scelto uno studente
+   mostrare tutti i suoi voti (materia e voto) in una tabella
+5) Il file pagella.html con gli studenti in ordine alfabetico e la loro media;
+   gli studenti con media sotto il 6 devono essere scritti in rosso
+
+Facoltativo:
+6) La materia con la media piu' bassa della classe

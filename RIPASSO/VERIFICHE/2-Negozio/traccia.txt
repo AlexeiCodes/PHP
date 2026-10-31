@@ -1,0 +1,28 @@
+ESERCIZIO IN PHP / simulazione verifica n.2 - NEGOZIO
+_____________________________________________________
+Dato il file (vendite.txt) con le vendite di una cartoleria, una riga per vendita:
+
+data,prodotto,categoria,quantita,prezzo_unitario
+
+Esempio:
+01/10,Quaderno,Cancelleria,4,2.50
+01/10,Penna,Cancelleria,10,1.20
+01/10,Zaino,Accessori,1,35.00
+...
+
+L'incasso di una vendita e' quantita * prezzo_unitario.
+
+Produrre in output
+__________________
+1) L'incasso totale di ogni prodotto, in una tabella ordinata dal prodotto
+   che ha incassato di piu' a quello che ha incassato di meno
+2) La categoria/le categorie con l'incasso maggiore
+3) Il prodotto/i prodotti piu' venduti come numero di pezzi (quantita)
+4) Un form con una casella di testo in cui scrivere il nome di un prodotto:
+   mostrare tutte le vendite di quel prodotto (data, quantita, incasso)
+   e il totale; se il prodotto non esiste scrivere "Prodotto non trovato"
+5) Il file categorie.html con le categorie in ordine alfabetico e,
+   per ognuna, il numero di vendite (righe del file)
+
+Facoltativo:
+6) L'incasso di ogni giorno e il giorno migliore

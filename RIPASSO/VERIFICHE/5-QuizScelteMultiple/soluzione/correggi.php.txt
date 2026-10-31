@@ -1,0 +1,49 @@
+<?php
+// =========================================================
+//  VERIFICA 5 - QUIZ   pagina 3: correzione
+// =========================================================
+$nome = $_POST["nome"];
+$ris  = $_POST["ris"];     // risposte dell'utente   (A/B/C)
+$riga = $_POST["riga"];    // numero di riga di ogni domanda nel file
+
+$righe = file("../domande.txt");   // rileggo il file per avere le soluzioni
+$giuste = 0;
+
+echo "<h2>Correzione</h2>";
+for ($i = 0; $i < count($riga); $i++)
+{
+    $numRiga = $riga[$i];
+    settype($numRiga, "integer");
+    $parti = explode(";", $righe[$numRiga]);
+    $domanda = $parti[0];
+    $corretta = trim($parti[4]);       // l'ultimo campo ha il \n: lo tolgo con trim
+
+    // trasformo la lettera giusta nel testo della risposta (A->1, B->2, C->3)
+    if ($corretta == "A") $testoGiusto = $parti[1];
+    elseif ($corretta == "B") $testoGiusto = $parti[2];
+    else $testoGiusto = $parti[3];
+
+    echo ($i + 1).") ".htmlspecialchars($domanda)." ";
+    if ($ris[$i] == $corretta)
+    {
+        echo "<font color=green>CORRETTA</font><br>";
+        $giuste++;
+    }
+    else
+    {
+        echo "<font color=red>SBAGLIATA</font> (giusta: $corretta - ".htmlspecialchars($testoGiusto).")<br>";
+    }
+}
+
+// 5) punteggio in centesimi
+$punteggio = round($giuste / count($riga) * 100);
+echo "<h3>".htmlspecialchars($nome)." ha totalizzato $punteggio/100</h3>";
+
+// 6) facoltativo
+if ($punteggio >= 60)
+    echo "<h3><font color=green>PROMOSSO</font></h3>";
+else
+    echo "<h3><font color=red>RIMANDATO</font></h3>";
+
+echo "<a href='index.html'>Rifai il quiz</a>";
+?>

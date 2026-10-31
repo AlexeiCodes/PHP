@@ -1,0 +1,33 @@
+ESERCIZIO IN PHP / simulazione verifica n.9 - REGISTRO PRESENZE
+_______________________________________________________________
+Dato il file (presenze.txt) con l'appello di ogni giorno, una riga per
+studente e per giorno:
+
+data,studente,stato
+
+dove stato e':  P = presente,  A = assente,  R = ritardo
+
+Esempio:
+03/11,Rossi,P
+03/11,Bianchi,P
+03/11,Verdi,P
+...
+
+Attenzione: l'ultimo campo e' una lettera, non un numero!
+
+Produrre in output
+__________________
+1) Una tabella con, per ogni studente: numero di assenze, numero di ritardi
+   e percentuale di assenze sul totale dei giorni (1 decimale)
+2) Gli studenti "a rischio" (assenze oltre il 25%) scritti in rosso
+3) Il giorno/i giorni con piu' assenti
+4) Un form con una casella di testo in cui scrivere il cognome di uno
+   studente (senza distinguere maiuscole e minuscole: "rossi", "ROSSI" e
+   "Rossi" vanno bene tutti): mostrare le date in cui e' stato assente o in
+   ritardo; se lo studente non esiste scrivere "Studente non trovato"
+5) Il file registro.html con una tabella: una riga per studente (in ordine
+   alfabetico), una colonna per ogni data; nelle celle P, A o R con
+   A in rosso e R in arancione
+
+Facoltativo:
+6) Gli studenti sempre presenti (nessuna assenza e nessun ritardo)
